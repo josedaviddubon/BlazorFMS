@@ -43,6 +43,7 @@ public partial class BlaFMSContext : DbContext
             entity.HasOne(d => d.Sucursal).WithMany(p => p.Colaborador)
                 .HasForeignKey(d => d.SucursalId)
                 .HasConstraintName("FK__Colaborad__Sucur__5070F446");
+            entity.Property(e => e.UserName).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Sucursal>(entity =>

@@ -18,7 +18,7 @@ namespace BlazorFMS.Data
             // Get Weather Forecasts  
             return await _context.Colaborador
                  // Only get entries for the current logged in user
-                 .Where(x => x.Nombre == strCurrentUser)
+                 .Where(x => x.UserName == strCurrentUser)
                  // Use AsNoTracking to disable EF change tracking
                  // Use ToListAsync to avoid blocking a thread
                  .AsNoTracking().ToListAsync();

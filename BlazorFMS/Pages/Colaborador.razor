@@ -7,39 +7,117 @@
 @inherits OwningComponentBase<ColaboradorServices>
 <h1>Colaborador</h1>
 
+
 <AuthorizeView>
     <!-- Show this section if the user is logged in -->
     <Authorized>
-<div>
-    <label>ID del Colaborador:</label>
-            <input class="form-control" type="text"
-                   placeholder="ID Colaborador"
-                   @bind="objColaborador.ColaboradorId" />
-</div>
+        <h4>Hello, @context.User.Identity?.Name!</h4>
+        @if (colaboradores == null)
+        {
+            <!-- Show this if the current user has no data... yet... -->
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ColaboradorID</th>
+                        <th>Nombre Completo</th>
+                        <th>Direccion Casa</th>
+                        <th>Sucursal Asignada</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var colaboradores in colaboradores)
+                    {
+                        <tr>
+                            <td>@colaboradores.ColaboradorId</td>
+                            <td>@colaboradores.Nombre</td>
+                            <td>@colaboradores.DireccionCasa</td>
+                            <td>@colaboradores.SucursalId</td>
+                            <td>
+                                <!-- Edit the current forecast -->
+                                <button class="btn btn-primary"
+                                @onclick="(() => EditColaborador(colaboradores))">
+                                    Edit
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <p>
+                <button class="btn btn-primary" @onclick="AddNewColaborador">Agregar nuevo Colaborador</button>
+            </p>
+            @if (ShowPopup)
+            {
+                <div class="modal" tabindex="-1" style="display:block" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">Edit Forecast</h3>
+                                <!-- Button to close the popup -->
+                                <button type="button" class="close"
+                                @onclick="ClosePopup">
+                                    <span aria-hidden="true">X</span>
+                                </button>
+                            </div>
+                            <!-- Edit form for the current forecast -->
+                            <div class="modal-body">
+                                <div class="form-container">
 
-<div>
-    <label for="nombre">Nombre:</label>
-            <input class="form-control" type="text"
-                   placeholder="Nombre"
-                   @bind="objColaborador.Nombre" />
-</div>
+                                    <div class="form-group">
+                                        <label for="nombre">Nombre:</label>
+                                        <input class="form-control" type="text" placeholder="Nombre" @bind="objColaborador.Nombre" />
+                                    </div>
 
-<div>
-    <label for="direccion">Dirección de Casa:</label>
-            <input type="text" id="direccion" @bind="objColaborador.DireccionCasa" />
-</div>
+                                    <div class="form-group">
+                                        <label for="direccion">Dirección de Casa:</label>
+                                        <input class="form-control" type="text" id="direccion" @bind="objColaborador.DireccionCasa" />
+                                    </div>
 
-<div>
-    <label for="sucursal">Sucursal ID:</label>
-            <input type="text" id="sucursal" @bind="objColaborador.SucursalId" />
-</div>
+                                    <div class="form-control">
+                                        <label for="sucursal">Sucursal ID:</label>
+                                    <input class="form-control" type="text" id="sucursal" @bind="objColaborador.SucursalId" />
+                                    </div>
+                                </div>
+                                <br />
+                                <!-- Button to save the forecast -->
+                                <button class="btn btn-success"
+                                @onclick="SaveColaborador">
+                                    Save
+                                </button>&nbsp;
+                                @if (objColaborador.ColaboradorId > 0)
+                                {
+                                    <!-- Button to delete the forecast -->
+                                    <button class="btn btn-danger"
+                                @onclick="DeleteColaborador">
+                                        Delete
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (ShowPopup)
+                {
+
+                }
+            }
+
+        }
+
 
     </Authorized>
+
     <!-- Show this section if the user is not logged in -->
     <NotAuthorized>
-        <p>Inicia Sesion Para Acceder.</p>
+        <p>Inicia Sesión Para Acceder.</p>
     </NotAuthorized>
 </AuthorizeView>
+
 
 @code {
 
@@ -83,13 +161,14 @@
     {
         // Close the Popup
         ShowPopup = false;
-        
+
         if (objColaborador.ColaboradorId == 0)
         {
-          
+
             Colaboradores objNewColaborador = new Colaboradores();
             objNewColaborador.Nombre = objColaborador.Nombre;
             objNewColaborador.DireccionCasa = objColaborador.DireccionCasa;
+            objNewColaborador.UserName = UserIdentityName;
             var result =
             @Service.CreateColaboradorAsync(objNewColaborador);
         }
