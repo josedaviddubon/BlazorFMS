@@ -1,0 +1,123 @@
+﻿@page "/colaboradores"
+@using BlazorFMS.Data
+@using BlazorFMS.Data.BlazorFMS
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@inherits OwningComponentBase<ColaboradorServices>
+<h1>Colaborador</h1>
+
+<AuthorizeView>
+    <!-- Show this section if the user is logged in -->
+    <Authorized>
+<div>
+    <label>ID del Colaborador:</label>
+            <input class="form-control" type="text"
+                   placeholder="ID Colaborador"
+                   @bind="objColaborador.ColaboradorId" />
+</div>
+
+<div>
+    <label for="nombre">Nombre:</label>
+            <input class="form-control" type="text"
+                   placeholder="Nombre"
+                   @bind="objColaborador.Nombre" />
+</div>
+
+<div>
+    <label for="direccion">Dirección de Casa:</label>
+            <input type="text" id="direccion" @bind="objColaborador.DireccionCasa" />
+</div>
+
+<div>
+    <label for="sucursal">Sucursal ID:</label>
+            <input type="text" id="sucursal" @bind="objColaborador.SucursalId" />
+</div>
+
+    </Authorized>
+    <!-- Show this section if the user is not logged in -->
+    <NotAuthorized>
+        <p>Inicia Sesion Para Acceder.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationStateTask { get; set; }
+    List<Colaboradores> colaboradores = new List<Colaboradores>();
+    private string UserIdentityName = "";
+    protected override async Task OnInitializedAsync()
+    {
+        // Get the current user
+        if (authenticationStateTask != null)
+        {
+            var user = (await authenticationStateTask).User;
+            if (user.Identity != null)
+            {
+                UserIdentityName = user.Identity.Name ?? "";
+            }
+        }
+        colaboradores = await @Service.GetColaboradorAsync(UserIdentityName);
+    }
+
+
+    Colaboradores objColaborador = new Colaboradores();
+
+    bool ShowPopup = false;
+    void ClosePopup()
+    {
+        // Close the Popup
+        ShowPopup = false;
+    }
+    void AddNewColaborador()
+    {
+        // Make new forecast
+        objColaborador = new Colaboradores();
+        // Set Id to 0 so we know it is a new record
+        objColaborador.ColaboradorId = 0;
+        // Open the Popup
+        ShowPopup = true;
+    }
+    async Task SaveColaborador()
+    {
+        // Close the Popup
+        ShowPopup = false;
+        
+        if (objColaborador.ColaboradorId == 0)
+        {
+          
+            Colaboradores objNewColaborador = new Colaboradores();
+            objNewColaborador.Nombre = objColaborador.Nombre;
+            objNewColaborador.DireccionCasa = objColaborador.DireccionCasa;
+            var result =
+            @Service.CreateColaboradorAsync(objNewColaborador);
+        }
+        else
+        {
+            var result =
+          @Service.UpdateColaboradorAsync(objColaborador);
+        }
+        // Get the forecasts for the current user
+        colaboradores =
+        await @Service.GetColaboradorAsync(UserIdentityName);
+
+    }
+    void EditColaborador(Colaboradores colaborador)
+    {
+
+        objColaborador = colaborador;
+        // Open the Popup
+        ShowPopup = true;
+    }
+    async Task DeleteColaborador()
+    {
+        // Close the Popup
+        ShowPopup = false;
+        // Delete the forecast
+        var result = @Service.DeleteColaboradorAsync(objColaborador);
+        // Get the forecasts for the current user
+        colaboradores =
+        await @Service.GetColaboradorAsync(UserIdentityName);
+    }
+}
