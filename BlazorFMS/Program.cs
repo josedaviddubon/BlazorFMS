@@ -27,6 +27,8 @@ builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuth
 //builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddScoped<WeatherForecastService>();
 builder.Services.AddScoped<ColaboradorServices>();
+builder.Services.AddScoped<SucursalService>();
+builder.Services.AddScoped<TransportistaServices>();
 
 //builder.Services.AddScoped<IColaboradorServices, ColaboradorServices>();
 

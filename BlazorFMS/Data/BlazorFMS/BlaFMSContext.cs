@@ -15,9 +15,9 @@ public partial class BlaFMSContext : DbContext
 
     public virtual DbSet<Colaboradores> Colaborador { get; set; }
 
-    public virtual DbSet<Sucursal> Sucursal { get; set; }
+    public virtual DbSet<Sucursales> Sucursal { get; set; }
 
-    public virtual DbSet<Transportista> Transportista { get; set; }
+    public virtual DbSet<Transportistas> Transportista { get; set; }
 
     public virtual DbSet<Viaje> Viaje { get; set; }
 
@@ -46,7 +46,7 @@ public partial class BlaFMSContext : DbContext
             entity.Property(e => e.UserName).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<Sucursal>(entity =>
+        modelBuilder.Entity<Sucursales>(entity =>
         {
             entity.HasKey(e => e.SucursalId).HasName("PK__Sucursal__6CB48281B9508136");
 
@@ -59,9 +59,10 @@ public partial class BlaFMSContext : DbContext
                 .IsRequired()
                 .HasMaxLength(100)
                 .IsUnicode(false);
+            entity.Property(e => e.UserName).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<Transportista>(entity =>
+        modelBuilder.Entity<Transportistas>(entity =>
         {
             entity.HasKey(e => e.TransportistaId).HasName("PK__Transpor__A26C7F55584836DA");
 
@@ -71,6 +72,7 @@ public partial class BlaFMSContext : DbContext
                 .HasMaxLength(50)
                 .IsUnicode(false);
             entity.Property(e => e.TarifaPorKilometro).HasColumnType("decimal(10, 2)");
+            entity.Property(e => e.UserName).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Viaje>(entity =>
@@ -82,6 +84,7 @@ public partial class BlaFMSContext : DbContext
             entity.Property(e => e.Distancia).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.Fecha).HasColumnType("date");
             entity.Property(e => e.TransportistaId).HasColumnName("TransportistaID");
+            entity.Property(e => e.UserName).HasMaxLength(50);
 
             entity.HasOne(d => d.Colaborador).WithMany(p => p.Viaje)
                 .HasForeignKey(d => d.ColaboradorId)

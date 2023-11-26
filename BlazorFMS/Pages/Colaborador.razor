@@ -11,7 +11,7 @@
 <AuthorizeView>
     <!-- Show this section if the user is logged in -->
     <Authorized>
-        <h4>Hello, @context.User.Identity?.Name!</h4>
+        <h4>Hola, @context.User.Identity?.Name!</h4>
         @if (colaboradores == null)
         {
             <!-- Show this if the current user has no data... yet... -->
@@ -57,7 +57,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h3 class="modal-title">Edit Forecast</h3>
+                                <h3 class="modal-title">Colaborador</h3>
                                 <!-- Button to close the popup -->
                                 <button type="button" class="close"
                                 @onclick="ClosePopup">

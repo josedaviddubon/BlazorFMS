@@ -10,24 +10,24 @@ namespace BlazorFMS.Data
         {
             _context = context;
         }
-        public async Task<List<Transportista>> GetForecastAsync(string strCurrentUser)
+        public async Task<List<Transportistas>> GetTransportistaAsync(string strCurrentUser)
         {
             // Get Weather Forecasts  
             return await _context.Transportista
                  // Only get entries for the current logged in user
-                 .Where(x => x.Nombre == strCurrentUser)
+                 .Where(x => x.UserName == strCurrentUser)
                  // Use AsNoTracking to disable EF change tracking
                  // Use ToListAsync to avoid blocking a thread
                  .AsNoTracking().ToListAsync();
         }
-        public Task<Transportista> CreateForecastAsync(Transportista obTransportista)
+        public Task<Transportistas> CreateTransportistaAsync(Transportistas obTransportista)
         {
             _context.Transportista.Add(obTransportista);
             _context.SaveChanges();
             return Task.FromResult(obTransportista);
         }
 
-        public Task<bool> UpdateForecastAsync(Transportista obTransportista)
+        public Task<bool> UpdateTransportistaAsync(Transportistas obTransportista)
         {
             var ExistingTransportista =
                 _context.Transportista
@@ -54,7 +54,7 @@ namespace BlazorFMS.Data
             return Task.FromResult(true);
         }
 
-        public Task<bool> DeleteForecastAsync(Transportista obTransportista)
+        public Task<bool> DeleteTransportistaAsync(Transportistas obTransportista)
         {
             var ExistingTransportista =
                 _context.Transportista

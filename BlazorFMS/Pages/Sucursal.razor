@@ -1,46 +1,43 @@
-﻿@page "/fetchdata"
+﻿@page "/sucursales"
 @using BlazorFMS.Data
 @using BlazorFMS.Data.BlazorFMS
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
-@inherits OwningComponentBase<WeatherForecastService>
-<h1>Weather forecast</h1>
+@inherits OwningComponentBase<SucursalService>
+<h1>Sucursal</h1>
 
 <AuthorizeView>
     <!-- Show this section if the user is logged in -->
     <Authorized>
         <h4>Hola, @context.User.Identity?.Name!</h4>
-        @if (forecasts == null)
+        @if (sucursales == null)
         {
             <!-- Show this if the current user has no data... yet... -->
             <p><em>Loading...</em></p>
         }
         else
         {
-            <!-- Show the forecasts for the current user -->
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>Temp. (C)</th>
-                        <th>Temp. (F)</th>
-                        <th>Summary</th>
+                        <th>Sucursal ID</th>
+                        <th>Nombre</th>
+                        <th>Ubicacion</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var forecast in forecasts)
+                    @foreach (var sucursales in sucursales)
                     {
                         <tr>
-                            <td>@forecast.Date?.ToShortDateString()</td>
-                            <td>@forecast.TemperatureC</td>
-                            <td>@forecast.TemperatureF</td>
-                            <td>@forecast.Summary</td>
+                            <td>@sucursales.SucursalId</td>
+                            <td>@sucursales.Nombre</td>
+                            <td>@sucursales.Ubicacion</td>
                             <td>
                                 <!-- Edit the current forecast -->
                                 <button class="btn btn-primary"
-                                @onclick="(() => EditForecast(forecast))">
+                                @onclick="(() => EditSucursal(sucursales))">
                                     Edit
                                 </button>
                             </td>
@@ -49,16 +46,15 @@
                 </tbody>
             </table>
             <p>
-                <button class="btn btn-primary" @onclick="AddNewForecast">Agregar nuevo Registro</button>
+                <button class="btn btn-primary" @onclick="AddNewSucursal">Agregar nueva Sucursal</button>
             </p>
             @if (ShowPopup)
             {
-                <!-- This is the popup to create or edit a forecast -->
                 <div class="modal" tabindex="-1" style="display:block" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h3 class="modal-title">Edit Forecast</h3>
+                                <h3 class="modal-title">Sucursal</h3>
                                 <!-- Button to close the popup -->
                                 <button type="button" class="close"
                                 @onclick="ClosePopup">
@@ -67,23 +63,29 @@
                             </div>
                             <!-- Edit form for the current forecast -->
                             <div class="modal-body">
-                                <input class="form-control" type="text" placeholder="Celsius forecast" @bind="objWeatherForecast.TemperatureC" />
-                                <input class="form-control" type="text"placeholder="Fahrenheit forecast"
-                               @bind="objWeatherForecast.TemperatureF" />
-                                <input class="form-control" type="text"
-                               placeholder="Summary"
-                               @bind="objWeatherForecast.Summary" />
+                                <div class="form-container">
+
+                                    <div class="form-group">
+                                        <label for="nombre">Nombre:</label>
+                                        <input class="form-control" type="text" placeholder="Nombre" @bind="objSucursales.Nombre" />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="direccion">Ubicacion</label>
+                                        <input class="form-control" type="text" id="direccion" @bind="objSucursales.Ubicacion" />
+                                    </div>
+                                </div>
                                 <br />
                                 <!-- Button to save the forecast -->
                                 <button class="btn btn-success"
-                                @onclick="SaveForecast">
+                                @onclick="SaveSucursal">
                                     Save
                                 </button>&nbsp;
-                                @if (objWeatherForecast.Id > 0)
+                                @if (objSucursales.SucursalId > 0)
                                 {
                                     <!-- Button to delete the forecast -->
                                     <button class="btn btn-danger"
-                                @onclick="DeleteForecast">
+                                @onclick="DeleteSucursal">
                                         Delete
                                     </button>
                                 }
@@ -93,26 +95,29 @@
                 </div>
                 @if (ShowPopup)
                 {
-                  
+
                 }
             }
 
-
         }
 
+
     </Authorized>
+
     <!-- Show this section if the user is not logged in -->
     <NotAuthorized>
-        <p>You're not signed in.</p>
+        <p>Inicia Sesión Para Acceder.</p>
     </NotAuthorized>
 </AuthorizeView>
 
-@code
-{
-    // AuthenticationState is available as a CascadingParameter
+
+
+@code {
+
+
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationStateTask { get; set; }
-    List<WeatherForecast> forecasts = new List<WeatherForecast>();
+    List<Sucursales> sucursales = new List<Sucursales>();
     private string UserIdentityName = "";
     protected override async Task OnInitializedAsync()
     {
@@ -125,72 +130,68 @@
                 UserIdentityName = user.Identity.Name ?? "";
             }
         }
-        // Get the forecasts for the current user
-        // We access WeatherForecastService using @Service
-        forecasts = await @Service.GetForecastAsync(UserIdentityName);
+        sucursales = await @Service.GetSucursalAsync(UserIdentityName);
     }
-    WeatherForecast objWeatherForecast = new WeatherForecast();
+
+
+    Sucursales objSucursales = new Sucursales();
+
     bool ShowPopup = false;
     void ClosePopup()
     {
         // Close the Popup
         ShowPopup = false;
     }
-    void AddNewForecast()
+    void AddNewSucursal()
     {
         // Make new forecast
-        objWeatherForecast = new WeatherForecast();
+        objSucursales = new Sucursales();
         // Set Id to 0 so we know it is a new record
-        objWeatherForecast.Id = 0;
+        objSucursales.SucursalId = 0;
         // Open the Popup
         ShowPopup = true;
     }
-    async Task SaveForecast()
+    async Task SaveSucursal()
     {
         // Close the Popup
         ShowPopup = false;
-        // A new forecast will have the Id set to 0
-        if (objWeatherForecast.Id == 0)
+
+        if (objSucursales.SucursalId == 0)
         {
-            // Create new forecast
-            WeatherForecast objNewWeatherForecast = new WeatherForecast();
-            objNewWeatherForecast.Date = System.DateTime.Now;
-            objNewWeatherForecast.Summary = objWeatherForecast.Summary;
-            objNewWeatherForecast.TemperatureC =
-            Convert.ToInt32(objWeatherForecast.TemperatureC);
-            objNewWeatherForecast.TemperatureF =
-            Convert.ToInt32(objWeatherForecast.TemperatureF);
-            objNewWeatherForecast.UserName = UserIdentityName;
-            // Save the result
+
+            Sucursales objNewSucursales = new Sucursales();
+            objNewSucursales.Nombre = objSucursales.Nombre;
+            objNewSucursales.Ubicacion = objSucursales.Ubicacion;
+            objNewSucursales.UserName = UserIdentityName;
             var result =
-            @Service.CreateForecastAsync(objNewWeatherForecast);
+            @Service.CreateSucursalAsync(objNewSucursales);
         }
         else
         {
             var result =
-          @Service.UpdateForecastAsync(objWeatherForecast);
+          @Service.UpdateSucursalAsync(objSucursales);
         }
         // Get the forecasts for the current user
-        forecasts =
-        await @Service.GetForecastAsync(UserIdentityName);
+        sucursales =
+        await @Service.GetSucursalAsync(UserIdentityName);
 
     }
-    void EditForecast(WeatherForecast weatherForecast)
+    void EditSucursal(Sucursales sucursales)
     {
-        // Set the selected forecast
-        // as the current forecast
-        objWeatherForecast = weatherForecast;
+
+        objSucursales = sucursales;
         // Open the Popup
         ShowPopup = true;
     }
-    async Task DeleteForecast()
+
+    async Task DeleteSucursal()
     {
-      
+
         ShowPopup = false;
-      
-        var result = @Service.DeleteForecastAsync(objWeatherForecast);
-       
-        forecasts =
-        await @Service.GetForecastAsync(UserIdentityName);
+
+        var result = @Service.DeleteSucursalAsync(objSucursales);
+
+        sucursales =
+        await @Service.GetSucursalAsync(UserIdentityName);
     }
 }

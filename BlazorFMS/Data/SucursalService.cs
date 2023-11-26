@@ -1,5 +1,8 @@
 ﻿using BlazorFMS.Data.BlazorFMS;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BlazorFMS.Data
 {
@@ -10,41 +13,34 @@ namespace BlazorFMS.Data
         {
             _context = context;
         }
-        public async Task<List<Sucursal>> GetForecastAsync(string strCurrentUser)
+        public async Task<List<Sucursales>> GetSucursalAsync(string strCurrentUser)
         {
             // Get Weather Forecasts  
             return await _context.Sucursal
                  // Only get entries for the current logged in user
-                 .Where(x => x.Nombre == strCurrentUser)
-                 // Use AsNoTracking to disable EF change tracking
-                 // Use ToListAsync to avoid blocking a thread
+                 .Where(x => x.UserName == strCurrentUser)
+
                  .AsNoTracking().ToListAsync();
         }
-        public Task<Sucursal> CreateForecastAsync(Sucursal obSucursal)
+        public Task<Sucursales> CreateSucursalAsync(Sucursales objSucursales)
         {
-            _context.Sucursal.Add(obSucursal);
+            _context.Sucursal.Add(objSucursales);
             _context.SaveChanges();
-            return Task.FromResult(obSucursal);
+            return Task.FromResult(objSucursales);
         }
 
-        public Task<bool> UpdateForecastAsync(Sucursal obSucursal)
+        public Task<bool> UpdateSucursalAsync(Sucursales objSucursales)
         {
             var ExistingSucursal =
                 _context.Sucursal
-                .Where(x => x.SucursalId == obSucursal.SucursalId)
+                .Where(x => x.SucursalId == objSucursales.SucursalId)
                 .FirstOrDefault();
             if (ExistingSucursal != null)
             {
                 ExistingSucursal.Nombre =
-                obSucursal.Nombre;
+                objSucursales.Nombre;
                 ExistingSucursal.Ubicacion =
-                obSucursal.Ubicacion;
-                /*
-                ExistingColaborador.TemperatureC =
-                obColaborador.TemperatureC;
-                ExistingColaborador.TemperatureF =
-                obColaborador.TemperatureF;
-                */
+                objSucursales.Ubicacion;
                 _context.SaveChanges();
             }
             else
@@ -54,11 +50,12 @@ namespace BlazorFMS.Data
             return Task.FromResult(true);
         }
 
-        public Task<bool> DeleteForecastAsync(Sucursal obSucursal)
+
+        public Task<bool> DeleteSucursalAsync(Sucursales objSucursales)
         {
             var ExistingSucursal =
                 _context.Sucursal
-                .Where(x => x.SucursalId == obSucursal.SucursalId)
+                .Where(x => x.SucursalId == objSucursales.SucursalId)
                 .FirstOrDefault();
             if (ExistingSucursal != null)
             {

@@ -5,13 +5,15 @@ using System.Collections.Generic;
 
 namespace BlazorFMS.Data.BlazorFMS;
 
-public partial class Transportista
+public partial class Transportistas
 {
     public int TransportistaId { get; set; }
 
     public string Nombre { get; set; }
 
     public decimal TarifaPorKilometro { get; set; }
+    public string UserName { get; set; }
 
     public virtual ICollection<Viaje> Viaje { get; set; } = new List<Viaje>();
+
 }

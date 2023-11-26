@@ -16,8 +16,10 @@ public partial class Viaje
     public int? ColaboradorId { get; set; }
 
     public int? TransportistaId { get; set; }
+    public string UserName { get; set; }
 
     public virtual Colaboradores Colaborador { get; set; }
 
-    public virtual Transportista Transportista { get; set; }
+    public virtual Transportistas Transportista { get; set; }
+
 }

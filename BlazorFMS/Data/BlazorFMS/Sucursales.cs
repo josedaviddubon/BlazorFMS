@@ -5,13 +5,15 @@ using System.Collections.Generic;
 
 namespace BlazorFMS.Data.BlazorFMS;
 
-public partial class Sucursal
+public partial class Sucursales
 {
     public int SucursalId { get; set; }
 
     public string Nombre { get; set; }
 
     public string Ubicacion { get; set; }
-
+    public string UserName { get; set; }
     public virtual ICollection<Colaboradores> Colaborador { get; set; } = new List<Colaboradores>();
+
+
 }
