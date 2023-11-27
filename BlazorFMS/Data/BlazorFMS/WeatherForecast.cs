@@ -2,20 +2,38 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlazorFMS.Data.BlazorFMS;
 
 public partial class WeatherForecast
 {
     public int Id { get; set; }
-
+    [Required]
     public DateTime? Date { get; set; }
-
+    [Required(ErrorMessage =
+        "Celsius es Requerido")]
+    [Range(typeof(int), "-51", "106",
+        ErrorMessage =
+        "Ingrese un rango de valido en Celsius(-51 to 106).")]
     public int? TemperatureC { get; set; }
-
+    [Required(ErrorMessage =
+        "Fahrenheit es Requerido")]
+    [Range(typeof(int), "-60", "224",
+        ErrorMessage =
+        "Ingrese un rango de valido en Fahrenheit (-60 to 224).")]
     public int? TemperatureF { get; set; }
-
+    [Required]
+    [StringLength(50, MinimumLength = 2,
+        ErrorMessage =
+        "Summary debe establecerse y tener un máximo de 50 caracteres.")]
     public string Summary { get; set; }
-
     public string UserName { get; set; }
+}
+// This class will hold the possible options that 
+// will be displayed on the dropdown for the Summary property
+public partial class WeatherForecastOptions
+{
+    public string OptionName { get; set; }
+    public string OptionValue { get; set; }
 }

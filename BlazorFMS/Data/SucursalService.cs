@@ -22,6 +22,16 @@ namespace BlazorFMS.Data
 
                  .AsNoTracking().ToListAsync();
         }
+
+        public async Task<List<Colaboradores>> GetColaboradoresAsync(string strCurrentUser)
+        {
+            return await _context.Colaborador
+                .Where(x => x.UserName == strCurrentUser)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+
         public Task<Sucursales> CreateSucursalAsync(Sucursales objSucursales)
         {
             _context.Sucursal.Add(objSucursales);
@@ -29,6 +39,7 @@ namespace BlazorFMS.Data
             return Task.FromResult(objSucursales);
         }
 
+       
         public Task<bool> UpdateSucursalAsync(Sucursales objSucursales)
         {
             var ExistingSucursal =
@@ -41,6 +52,7 @@ namespace BlazorFMS.Data
                 objSucursales.Nombre;
                 ExistingSucursal.Ubicacion =
                 objSucursales.Ubicacion;
+
                 _context.SaveChanges();
             }
             else

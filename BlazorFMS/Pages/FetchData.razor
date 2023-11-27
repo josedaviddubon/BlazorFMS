@@ -3,14 +3,24 @@
 @using BlazorFMS.Data.BlazorFMS
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@*
+    Using OwningComponentBase ensures that the service and related services
+    that share its scope are disposed with the component.
+    Otherwise DbContext in ForecastService will live for the life of the
+    connection, which may be problematic if clients stay
+    connected for a long time.
 
+    We access WeatherForecastService using @Service
+*@
 @inherits OwningComponentBase<WeatherForecastService>
-<h1>Weather forecast</h1>
 
+<h1>Weather forecast</h1>
+<!-- AuthorizeView allows us to only show sections of the page -->
+<!-- based on the security on the current user -->
 <AuthorizeView>
     <!-- Show this section if the user is logged in -->
     <Authorized>
-        <h4>Hola, @context.User.Identity?.Name!</h4>
+        <h4>Hello, @context.User.Identity.Name!</h4>
         @if (forecasts == null)
         {
             <!-- Show this if the current user has no data... yet... -->
@@ -33,7 +43,7 @@
                     @foreach (var forecast in forecasts)
                     {
                         <tr>
-                            <td>@forecast.Date?.ToShortDateString()</td>
+                            <td>@forecast.Date.Value.ToShortDateString()</td>
                             <td>@forecast.TemperatureC</td>
                             <td>@forecast.TemperatureF</td>
                             <td>@forecast.Summary</td>
@@ -49,8 +59,14 @@
                 </tbody>
             </table>
             <p>
-                <button class="btn btn-primary" @onclick="AddNewForecast">Agregar nuevo Registro</button>
+                <!-- Add a new forecast -->
+                <button class="btn btn-primary"
+                    @onclick="AddNewForecast">
+                    Add New Forecast
+                </button>
             </p>
+
+
             @if (ShowPopup)
             {
                 <!-- This is the popup to create or edit a forecast -->
@@ -66,40 +82,75 @@
                                 </button>
                             </div>
                             <!-- Edit form for the current forecast -->
-                            <div class="modal-body">
-                                <input class="form-control" type="text" placeholder="Celsius forecast" @bind="objWeatherForecast.TemperatureC" />
-                                <input class="form-control" type="text"placeholder="Fahrenheit forecast"
-                               @bind="objWeatherForecast.TemperatureF" />
-                                <input class="form-control" type="text"
-                               placeholder="Summary"
-                               @bind="objWeatherForecast.Summary" />
-                                <br />
-                                <!-- Button to save the forecast -->
-                                <button class="btn btn-success"
-                                @onclick="SaveForecast">
-                                    Save
-                                </button>&nbsp;
-                                @if (objWeatherForecast.Id > 0)
-                                {
-                                    <!-- Button to delete the forecast -->
-                                    <button class="btn btn-danger"
-                                @onclick="DeleteForecast">
-                                        Delete
+                            <EditForm Context="formContext"
+                              Model="objWeatherForecast"
+                              OnValidSubmit="SaveForecast">
+                                <!-- This will validate the form -->
+                                <DataAnnotationsValidator />
+                                <!-- This will show any validation errors -->
+                                @*<ValidationSummary />*@
+                                <ul class="validation-errors">
+                                    @foreach (
+                                   var message in formContext.GetValidationMessages()
+                                   .Where(x => !x.Contains("Summary")))
+                                    {
+                                        <li class="validation-message">@message</li>
+                                    }
+                                </ul>
+                                <div class="modal-body">
+                                    <p>
+                                        <label for="Date">Date: </label>
+                                        <InputDate id="Date" class="form-control"
+                                           placeholder="Date"
+                                           @bind-Value="objWeatherForecast.Date" />
+                                    </p><p>
+                                        <label for="TemperatureC">Celsius: </label>
+                                        <InputNumber id="TemperatureC" class="form-control"
+                                             placeholder="Celsius forecast"
+                                             @bind-Value="objWeatherForecast.TemperatureC" />
+                                    </p><p>
+                                        <label for="TemperatureF">Fahrenheit: </label>
+                                        <InputNumber id="TemperatureF" class="form-control"
+                                             placeholder="Fahrenheit forecast"
+                                             @bind-Value="objWeatherForecast.TemperatureF" />
+                                    </p><p>
+                                        <label for="Summary">Summary: </label>
+                                        <InputSelect id="Summary" class="form-control"
+                                             @bind-Value="objWeatherForecast.Summary">
+                                            @foreach (var option in SummaryOptions)
+                                            {
+                                                <option value="@option.OptionValue">
+                                                    @option.OptionName
+                                                </option>
+                                            }
+                                            /**/
+                                        </InputSelect>
+                                        <ValidationMessage For="@(() => objWeatherForecast.Summary)" />
+                                    </p>
+                                    <br />
+                                    <!-- Button to save the forecast -->
+                                    <button class="btn btn-primary"
+                                    type="submit">
+                                        Save
                                     </button>
-                                }
-                            </div>
+                                    <!-- Only show delete button if not a new record -->
+                                    @if (objWeatherForecast.Id > 0)
+                                    {
+                                        <!-- Button to delete the forecast -->
+                                        <button class="btn btn-primary"
+                                    @onclick="DeleteForecast">
+                                            Delete
+                                        </button>
+                                    }
+                                </div>
+                            </EditForm>
                         </div>
                     </div>
                 </div>
-                @if (ShowPopup)
-                {
-                  
-                }
             }
 
 
         }
-
     </Authorized>
     <!-- Show this section if the user is not logged in -->
     <NotAuthorized>
@@ -113,6 +164,15 @@
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationStateTask { get; set; }
     List<WeatherForecast> forecasts = new List<WeatherForecast>();
+
+    List<WeatherForecastOptions> SummaryOptions = new List<WeatherForecastOptions>() {
+    new WeatherForecastOptions() { OptionName = "Select...", OptionValue = " " },
+        new WeatherForecastOptions() { OptionName = "Hot", OptionValue = "Hot" },
+        new WeatherForecastOptions() { OptionName = "Mild", OptionValue = "Mild" },
+        new WeatherForecastOptions() { OptionName = "Cold", OptionValue = "Cold" }};
+
+
+
     private string UserIdentityName = "";
     protected override async Task OnInitializedAsync()
     {

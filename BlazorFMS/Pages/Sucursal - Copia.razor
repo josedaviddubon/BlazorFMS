@@ -1,4 +1,4 @@
-﻿@page "/sucursales"
+﻿@page "/sucursaless"
 @using BlazorFMS.Data
 @using BlazorFMS.Data.BlazorFMS
 
@@ -28,16 +28,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var sucursal in sucursales)
+                    @foreach (var sucursales in sucursales)
                     {
                         <tr>
-                            <td>@sucursal.SucursalId</td>
-                            <td>@sucursal.Nombre</td>
-                            <td>@sucursal.Ubicacion</td>
+                            <td>@sucursales.SucursalId</td>
+                            <td>@sucursales.Nombre</td>
+                            <td>@sucursales.Ubicacion</td>
                             <td>
                                 <!-- Edit the current forecast -->
                                 <button class="btn btn-primary"
-                                @onclick="(() => EditSucursal(sucursal))">
+                                @onclick="(() => EditSucursal(sucursales))">
                                     Edit
                                 </button>
                             </td>
@@ -74,20 +74,6 @@
                                         <label for="direccion">Ubicacion</label>
                                         <input class="form-control" type="text" id="direccion" @bind="objSucursales.Ubicacion" />
                                     </div>
-
-                                    <!-- Agregar sección para detalles de sucursal -->
-                                    <div class="form-group">
-                                        <label for="colaborador">Colaborador:</label>
-                                        <!-- Aquí puedes usar un desplegable (dropdown) para seleccionar colaboradores -->
-                                        <select class="form-control" @bind="objDetSucursales.ColaboradorId">
-                                            <option value="">Selecciona un colaborador</option>
-                                            @foreach (var colaborador in colaboradores)
-                                            {
-                                                <option value="@colaborador.ColaboradorId">@colaborador.Nombre</option>
-                                            }
-                                        </select>
-                                    </div>
-
                                 </div>
                                 <br />
                                 <!-- Button to save the forecast -->
@@ -107,9 +93,15 @@
                         </div>
                     </div>
                 </div>
+                @if (ShowPopup)
+                {
+
+                }
             }
 
         }
+
+
     </Authorized>
 
     <!-- Show this section if the user is not logged in -->
@@ -118,6 +110,8 @@
     </NotAuthorized>
 </AuthorizeView>
 
+
+
 @code {
 
 
@@ -125,7 +119,6 @@
     private Task<AuthenticationState>? authenticationStateTask { get; set; }
     List<Sucursales> sucursales = new List<Sucursales>();
     private string UserIdentityName = "";
-    List<Colaboradores> colaboradores = new List<Colaboradores>();
     protected override async Task OnInitializedAsync()
     {
         // Get the current user
@@ -142,7 +135,6 @@
 
 
     Sucursales objSucursales = new Sucursales();
-    SucursalDetalles objDetSucursales = new SucursalDetalles();
 
     bool ShowPopup = false;
     void ClosePopup()
@@ -154,9 +146,6 @@
     {
         // Make new forecast
         objSucursales = new Sucursales();
-        objDetSucursales = new SucursalDetalles();
-
-
         // Set Id to 0 so we know it is a new record
         objSucursales.SucursalId = 0;
         // Open the Popup
@@ -174,17 +163,8 @@
             objNewSucursales.Nombre = objSucursales.Nombre;
             objNewSucursales.Ubicacion = objSucursales.Ubicacion;
             objNewSucursales.UserName = UserIdentityName;
-
             var result =
             @Service.CreateSucursalAsync(objNewSucursales);
-
-            SucursalDetalles detalle = new SucursalDetalles();
-            {
-                detalle.ColaboradorId = objDetSucursales.ColaboradorId; // Colaborador seleccionado
-                detalle.DistanciaKilometros = objDetSucursales.DistanciaKilometros; // Agrega la propiedad según tu modelo
-            };
-            
-
         }
         else
         {
@@ -196,10 +176,6 @@
         await @Service.GetSucursalAsync(UserIdentityName);
 
     }
-
-
-
-
     void EditSucursal(Sucursales sucursales)
     {
 

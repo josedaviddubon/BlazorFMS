@@ -12,8 +12,8 @@ public partial class Transportistas
     public string Nombre { get; set; }
 
     public decimal TarifaPorKilometro { get; set; }
+
     public string UserName { get; set; }
 
     public virtual ICollection<Viaje> Viaje { get; set; } = new List<Viaje>();
-
 }

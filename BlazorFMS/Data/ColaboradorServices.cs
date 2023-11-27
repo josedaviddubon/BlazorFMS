@@ -42,12 +42,6 @@ namespace BlazorFMS.Data
                     objColaborador.Nombre;
                     ExistingColaborador.DireccionCasa =
                     objColaborador.DireccionCasa;
-                    /*
-                    ExistingColaborador.TemperatureC =
-                    obColaborador.TemperatureC;
-                    ExistingColaborador.TemperatureF =
-                    obColaborador.TemperatureF;
-                    */
                     _context.SaveChanges();
                 }
                 else

@@ -5,21 +5,17 @@ using System.Collections.Generic;
 
 namespace BlazorFMS.Data.BlazorFMS;
 
-public partial class Viaje
+public partial class SucursalDetalles
 {
-    public int Id { get; set; }
+    public int SucursalDetalleId { get; set; }
 
-    public DateTime Fecha { get; set; }
-
-    public decimal Distancia { get; set; }
+    public int? SucursalId { get; set; }
 
     public int? ColaboradorId { get; set; }
 
-    public int? TransportistaId { get; set; }
-
-    public string UserName { get; set; }
+    public decimal? DistanciaKilometros { get; set; }
 
     public virtual Colaboradores Colaborador { get; set; }
 
-    public virtual Transportistas Transportista { get; set; }
+    public virtual Sucursales Sucursal { get; set; }
 }

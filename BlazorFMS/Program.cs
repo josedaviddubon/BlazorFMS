@@ -13,6 +13,8 @@ builder.Services.AddDbContext<BlazorFMS.Data.BlazorFMS.BlaFMSContext>(options =>
 options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//builder.Services.AddBlazoredToast();
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

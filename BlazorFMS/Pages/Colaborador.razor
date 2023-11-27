@@ -25,7 +25,6 @@
                         <th>ColaboradorID</th>
                         <th>Nombre Completo</th>
                         <th>Direccion Casa</th>
-                        <th>Sucursal Asignada</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -36,7 +35,6 @@
                             <td>@colaboradores.ColaboradorId</td>
                             <td>@colaboradores.Nombre</td>
                             <td>@colaboradores.DireccionCasa</td>
-                            <td>@colaboradores.SucursalId</td>
                             <td>
                                 <!-- Edit the current forecast -->
                                 <button class="btn btn-primary"
@@ -78,10 +76,10 @@
                                         <input class="form-control" type="text" id="direccion" @bind="objColaborador.DireccionCasa" />
                                     </div>
 
-                                    <div class="form-control">
+@*                                    <div class="form-control">
                                         <label for="sucursal">Sucursal ID:</label>
                                     <input class="form-control" type="text" id="sucursal" @bind="objColaborador.SucursalId" />
-                                    </div>
+                                    </div>*@
                                 </div>
                                 <br />
                                 <!-- Button to save the forecast -->
