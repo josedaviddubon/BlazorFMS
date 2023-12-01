@@ -10,16 +10,16 @@ namespace BlazorFMS.Data
             _context = context;
         }
         
-        public async Task<List<Viaje>> GetViajeAsync(string strCurrentUser)
-        {
-            // Get Weather Forecasts  
-            return await _context.Viaje
-                 // Only get entries for the current logged in user
-                 .Where(x => x.UserName == strCurrentUser)
-                 // Use AsNoTracking to disable EF change tracking
-                 // Use ToListAsync to avoid blocking a thread
-                 .AsNoTracking().ToListAsync();
-        }
+        //public async Task<List<Viaje>> GetViajeAsync(string strCurrentUser)
+        //{
+        //    // Get Weather Forecasts  
+        //    return await _context.Viaje
+        //         // Only get entries for the current logged in user
+        //         .Where(x => x.UserName == strCurrentUser)
+        //         // Use AsNoTracking to disable EF change tracking
+        //         // Use ToListAsync to avoid blocking a thread
+        //         .AsNoTracking().ToListAsync();
+        //}
         
         public Task<Viaje> CreateViajetAsync(Viaje obViaje)
         {

@@ -88,6 +88,11 @@
                                         </select>
                                     </div>
 
+                                    <div class="form-group">
+                                        <label for="direccion">Distancia Kilometros</label>
+                                        <input class="form-control" type="number" id="distancia" @bind="objDetSucursales.DistanciaKilometros" />
+                                    </div>
+
                                 </div>
                                 <br />
                                 <!-- Button to save the forecast -->
@@ -138,6 +143,7 @@
             }
         }
         sucursales = await @Service.GetSucursalAsync(UserIdentityName);
+        colaboradores = await @Service.GetColaboradoresAsync(UserIdentityName);
     }
 
 
@@ -156,6 +162,7 @@
         // Make new forecast
         objSucursales = new Sucursales();
         objDetSucursales = new SucursalDetalles();
+        objColaborador = new Colaboradores();
 
 
         // Set Id to 0 so we know it is a new record
@@ -182,6 +189,11 @@
             SucursalDetalles detalle = new SucursalDetalles();
             {
                 detalle.ColaboradorId = objDetSucursales.ColaboradorId; // Colaborador seleccionado
+
+                if(objDetSucursales.DistanciaKilometros == 0 || objDetSucursales.DistanciaKilometros == 50)
+                {
+
+                }
                 detalle.DistanciaKilometros = objDetSucursales.DistanciaKilometros; // Agrega la propiedad según tu modelo
             };
             
