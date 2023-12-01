@@ -9,26 +9,26 @@ namespace BlazorFMS.Data
         {
             _context = context;
         }
-        /*
-        public async Task<List<Viaje>> GetForecastAsync(string strCurrentUser)
+        
+        public async Task<List<Viaje>> GetViajeAsync(string strCurrentUser)
         {
             // Get Weather Forecasts  
             return await _context.Viaje
                  // Only get entries for the current logged in user
-                 .Where(x => x.Colaborador == strCurrentUser)
+                 .Where(x => x.UserName == strCurrentUser)
                  // Use AsNoTracking to disable EF change tracking
                  // Use ToListAsync to avoid blocking a thread
                  .AsNoTracking().ToListAsync();
         }
-        */
-        public Task<Viaje> CreateForecastAsync(Viaje obViaje)
+        
+        public Task<Viaje> CreateViajetAsync(Viaje obViaje)
         {
             _context.Viaje.Add(obViaje);
             _context.SaveChanges();
             return Task.FromResult(obViaje);
         }
 
-        public Task<bool> UpdateForecastAsync(Viaje obViaje)
+        public Task<bool> UpdateViajeAsync(Viaje obViaje)
         {
             var ExistingViaje =
                 _context.Viaje
@@ -55,7 +55,7 @@ namespace BlazorFMS.Data
             return Task.FromResult(true);
         }
 
-        public Task<bool> DeleteForecastAsync(Viaje obViaje)
+        public Task<bool> DeleteViajeAsync(Viaje obViaje)
         {
             var ExistingViaje =
                 _context.Viaje

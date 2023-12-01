@@ -79,7 +79,7 @@
                                     <div class="form-group">
                                         <label for="colaborador">Colaborador:</label>
                                         <!-- Aquí puedes usar un desplegable (dropdown) para seleccionar colaboradores -->
-                                        <select class="form-control" @bind="objDetSucursales.ColaboradorId">
+                                        <select class="form-control" @bind="objColaborador.ColaboradorId">
                                             <option value="">Selecciona un colaborador</option>
                                             @foreach (var colaborador in colaboradores)
                                             {
@@ -142,6 +142,7 @@
 
 
     Sucursales objSucursales = new Sucursales();
+    Colaboradores objColaborador = new Colaboradores();
     SucursalDetalles objDetSucursales = new SucursalDetalles();
 
     bool ShowPopup = false;

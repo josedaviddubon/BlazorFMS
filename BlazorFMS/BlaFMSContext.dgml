@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph GraphDirection="LeftToRight" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+<Node Id="IModel" Label="BlaFMSContext" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot" PropertyAccessMode="PropertyAccessMode.Default" ProductVersion="6.0.23" Annotations="BaseTypeDiscoveryConvention:DerivedTypes: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.List`1[Microsoft.EntityFrameworkCore.Metadata.IConventionEntityType]]
+Relational:MaxIdentifierLength: 128
+RelationshipDiscoveryConvention:InverseNavigationCandidates: System.Collections.Generic.Dictionary`2[System.Type,System.Collections.Generic.SortedSet`1[System.Type]]
+SqlServer:ValueGenerationStrategy: IdentityColumn" Category="Model" Group="Expanded" />
+<Node Id = "Colaboradores" Label="Colaboradores" Name="Colaboradores" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: Colaborador
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "SucursalDetalles" Label="SucursalDetalles" Name="SucursalDetalles" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: SucursalDetalle
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Colaboradores.ColaboradorId" Label="ColaboradorId (int)" Name="ColaboradorId" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnName: ColaboradorID
+SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Colaboradores.SucursalDetalle" Label="SucursalDetalle (*)" Name="SucursalDetalle" Category="Navigation Collection" Type="ICollection&lt;SucursalDetalles&gt;"  Field="" Dependent="SucursalDetalles" Principal="" Inverse="Colaborador" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Colaboradores.Viaje" Label="Viaje (*)" Name="Viaje" Category="Navigation Collection" Type="ICollection&lt;Viaje&gt;"  Field="" Dependent="Viaje" Principal="" Inverse="Colaborador" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Colaboradores.DireccionCasa" Label="DireccionCasa (string)" Name="DireccionCasa" Category="Property Required" Type="string" MaxLength="(100)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 100
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Colaboradores.Nombre" Label="Nombre (string)" Name="Nombre" Category="Property Required" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Colaboradores.UserName" Label="UserName (string)" Name="UserName" Category="Property Optional" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Sucursales" Label="Sucursales" Name="Sucursales" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: Sucursal
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "SucursalDetalles.SucursalDetalleId" Label="SucursalDetalleId (int)" Name="SucursalDetalleId" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnName: SucursalDetalleID
+SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "SucursalDetalles.Colaborador" Label="Colaborador (1)" Name="Colaborador" Category="Navigation Property" Type="Colaboradores"  Field="" Dependent="" Principal="Colaboradores" Inverse="SucursalDetalle" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "SucursalDetalles.Sucursal" Label="Sucursal (1)" Name="Sucursal" Category="Navigation Property" Type="Sucursales"  Field="" Dependent="" Principal="Sucursales" Inverse="SucursalDetalle" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "SucursalDetalles.ColaboradorId" Label="ColaboradorId (int?)" Name="ColaboradorId" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnName: ColaboradorID" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "SucursalDetalles.DistanciaKilometros" Label="DistanciaKilometros (decimal?)" Name="DistanciaKilometros" Category="Property Optional" Type="decimal?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: decimal(10, 2)" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "SucursalDetalles.SucursalId" Label="SucursalId (int?)" Name="SucursalId" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnName: SucursalID" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Transportistas" Label="Transportistas" Name="Transportistas" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: Transportista
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Sucursales.SucursalId" Label="SucursalId (int)" Name="SucursalId" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnName: SucursalID
+SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Sucursales.SucursalDetalle" Label="SucursalDetalle (*)" Name="SucursalDetalle" Category="Navigation Collection" Type="ICollection&lt;SucursalDetalles&gt;"  Field="" Dependent="SucursalDetalles" Principal="" Inverse="Sucursal" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Sucursales.Nombre" Label="Nombre (string)" Name="Nombre" Category="Property Required" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Sucursales.Ubicacion" Label="Ubicacion (string)" Name="Ubicacion" Category="Property Required" Type="string" MaxLength="(100)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 100
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Sucursales.UserName" Label="UserName (string)" Name="UserName" Category="Property Optional" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Viaje" Label="Viaje" Name="Viaje" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: Viaje
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Transportistas.TransportistaId" Label="TransportistaId (int)" Name="TransportistaId" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnName: TransportistaID
+SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Transportistas.Viaje" Label="Viaje (*)" Name="Viaje" Category="Navigation Collection" Type="ICollection&lt;Viaje&gt;"  Field="" Dependent="Viaje" Principal="" Inverse="Transportista" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Transportistas.Nombre" Label="Nombre (string)" Name="Nombre" Category="Property Required" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50
+Unicode: False" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="False" ValueGenerated="None" />
+<Node Id = "Transportistas.TarifaPorKilometro" Label="TarifaPorKilometro (decimal)" Name="TarifaPorKilometro" Category="Property Required" Type="decimal" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: decimal(10, 2)" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Transportistas.UserName" Label="UserName (string)" Name="UserName" Category="Property Optional" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "WeatherForecast" Label="WeatherForecast" Name="WeatherForecast" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="Relational:TableName: WeatherForecast
+RelationshipDiscoveryConvention:NavigationCandidates: System.Collections.Immutable.ImmutableSortedDictionary`2[System.Reflection.PropertyInfo,System.ValueTuple`2[System.Type,System.Nullable`1[System.Boolean]]]" Category="EntityType" Group="Expanded" />
+<Node Id = "Viaje.Id" Label="Id (int)" Name="Id" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnName: ID
+SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "Viaje.Colaborador" Label="Colaborador (1)" Name="Colaborador" Category="Navigation Property" Type="Colaboradores"  Field="" Dependent="" Principal="Colaboradores" Inverse="Viaje" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Viaje.Transportista" Label="Transportista (1)" Name="Transportista" Category="Navigation Property" Type="Transportistas"  Field="" Dependent="" Principal="Transportistas" Inverse="Viaje" PropertyAccessMode="PropertyAccessMode.Default" />
+<Node Id = "Viaje.ColaboradorId" Label="ColaboradorId (int?)" Name="ColaboradorId" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnName: ColaboradorID" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Viaje.Distancia" Label="Distancia (decimal)" Name="Distancia" Category="Property Required" Type="decimal" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: decimal(10, 2)" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Viaje.Fecha" Label="Fecha (DateTime)" Name="Fecha" Category="Property Required" Type="DateTime" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: date" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Viaje.TransportistaId" Label="TransportistaId (int?)" Name="TransportistaId" Category="Property Foreign" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnName: TransportistaID" IsPrimaryKey="False" IsForeignKey="True" IsRequired="False" IsIndexed="True" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "Viaje.UserName" Label="UserName (string)" Name="UserName" Category="Property Optional" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "WeatherForecast" Label="WeatherForecast" Name="WeatherForecast" BaseClass="" IsAbstract="False" ChangeTrackingStrategy="ChangeTrackingStrategy.Snapshot"  Annotations="" Category="EntityType" Group="Expanded" />
+<Node Id = "WeatherForecast.Id" Label="Id (int)" Name="Id" Category="Property Primary" Type="int" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="SqlServer:ValueGenerationStrategy: IdentityColumn" IsPrimaryKey="True" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="ValueGenerated.OnAdd" />
+<Node Id = "WeatherForecast.Date" Label="Date (DateTime?)" Name="Date" Category="Property Required" Type="DateTime?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="Relational:ColumnType: datetime" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "WeatherForecast.Summary" Label="Summary (string)" Name="Summary" Category="Property Required" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "WeatherForecast.TemperatureC" Label="TemperatureC (int?)" Name="TemperatureC" Category="Property Required" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "WeatherForecast.TemperatureF" Label="TemperatureF (int?)" Name="TemperatureF" Category="Property Required" Type="int?" MaxLength="None" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="" IsPrimaryKey="False" IsForeignKey="False" IsRequired="True" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+<Node Id = "WeatherForecast.UserName" Label="UserName (string)" Name="UserName" Category="Property Optional" Type="string" MaxLength="(50)" Field="" PropertyAccessMode="PropertyAccessMode.Default" BeforeSaveBehavior="PropertySaveBehavior.Save" AfterSaveBehavior="PropertySaveBehavior.Save" Annotations="MaxLength: 50" IsPrimaryKey="False" IsForeignKey="False" IsRequired="False" IsIndexed="False" IsShadow="False" IsAlternateKey="False" IsConcurrencyToken="False" IsUnicode="True" ValueGenerated="None" />
+  </Nodes>
+  <Links>
+<Link Source = "IModel" Target="Colaboradores" Category="Contains" />
+<Link Source = "IModel" Target="SucursalDetalles" Category="Contains" />
+<Link Source = "Colaboradores" Target="Colaboradores.SucursalDetalle" Category="Contains" />
+<Link Source = "Colaboradores" Target="Colaboradores.Viaje" Category="Contains" />
+<Link Source = "Colaboradores" Target="Colaboradores.ColaboradorId" Category="Contains" />
+<Link Source = "Colaboradores" Target="Colaboradores.DireccionCasa" Category="Contains" />
+<Link Source = "Colaboradores" Target="Colaboradores.Nombre" Category="Contains" />
+<Link Source = "Colaboradores" Target="Colaboradores.UserName" Category="Contains" />
+<Link Source = "IModel" Target="Sucursales" Category="Contains" />
+<Link Source = "SucursalDetalles" Target="SucursalDetalles.Colaborador" Category="Contains" />
+<Link Source = "SucursalDetalles" Target="SucursalDetalles.Sucursal" Category="Contains" />
+<Link Source = "SucursalDetalles" Target="SucursalDetalles.SucursalDetalleId" Category="Contains" />
+<Link Source="SucursalDetalles" Target="Colaboradores" From="SucursalDetalles.ColaboradorId" To="Colaboradores.ColaboradorId" Name="SucursalDetalles -> Colaboradores" Annotations="Relational:Name: FK__SucursalD__Colab__5EBF139D" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="SucursalDetalles" Target="Sucursales" From="SucursalDetalles.SucursalId" To="Sucursales.SucursalId" Name="SucursalDetalles -> Sucursales" Annotations="Relational:Name: FK__SucursalD__Sucur__5DCAEF64" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "SucursalDetalles" Target="SucursalDetalles.ColaboradorId" Category="Contains" />
+<Link Source = "SucursalDetalles" Target="SucursalDetalles.DistanciaKilometros" Category="Contains" />
+<Link Source = "SucursalDetalles" Target="SucursalDetalles.SucursalId" Category="Contains" />
+<Link Source = "IModel" Target="Transportistas" Category="Contains" />
+<Link Source = "Sucursales" Target="Sucursales.SucursalDetalle" Category="Contains" />
+<Link Source = "Sucursales" Target="Sucursales.SucursalId" Category="Contains" />
+<Link Source = "Sucursales" Target="Sucursales.Nombre" Category="Contains" />
+<Link Source = "Sucursales" Target="Sucursales.Ubicacion" Category="Contains" />
+<Link Source = "Sucursales" Target="Sucursales.UserName" Category="Contains" />
+<Link Source = "IModel" Target="Viaje" Category="Contains" />
+<Link Source = "Transportistas" Target="Transportistas.Viaje" Category="Contains" />
+<Link Source = "Transportistas" Target="Transportistas.TransportistaId" Category="Contains" />
+<Link Source = "Transportistas" Target="Transportistas.Nombre" Category="Contains" />
+<Link Source = "Transportistas" Target="Transportistas.TarifaPorKilometro" Category="Contains" />
+<Link Source = "Transportistas" Target="Transportistas.UserName" Category="Contains" />
+<Link Source = "IModel" Target="WeatherForecast" Category="Contains" />
+<Link Source = "Viaje" Target="Viaje.Colaborador" Category="Contains" />
+<Link Source = "Viaje" Target="Viaje.Transportista" Category="Contains" />
+<Link Source = "Viaje" Target="Viaje.Id" Category="Contains" />
+<Link Source="Viaje" Target="Colaboradores" From="Viaje.ColaboradorId" To="Colaboradores.ColaboradorId" Name="Viaje -> Colaboradores" Annotations="Relational:Name: FK__Viaje__Colaborad__5535A963" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source="Viaje" Target="Transportistas" From="Viaje.TransportistaId" To="Transportistas.TransportistaId" Name="Viaje -> Transportistas" Annotations="Relational:Name: FK__Viaje__Transport__5629CD9C" IsUnique="False" Label="1:*" Category="Foreign Key" />
+<Link Source = "Viaje" Target="Viaje.ColaboradorId" Category="Contains" />
+<Link Source = "Viaje" Target="Viaje.Distancia" Category="Contains" />
+<Link Source = "Viaje" Target="Viaje.Fecha" Category="Contains" />
+<Link Source = "Viaje" Target="Viaje.TransportistaId" Category="Contains" />
+<Link Source = "Viaje" Target="Viaje.UserName" Category="Contains" />
+<Link Source = "IModel" Target="WeatherForecast" Category="Contains" />
+<Link Source = "WeatherForecast" Target="WeatherForecast.Id" Category="Contains" />
+<Link Source = "WeatherForecast" Target="WeatherForecast.Date" Category="Contains" />
+<Link Source = "WeatherForecast" Target="WeatherForecast.Summary" Category="Contains" />
+<Link Source = "WeatherForecast" Target="WeatherForecast.TemperatureC" Category="Contains" />
+<Link Source = "WeatherForecast" Target="WeatherForecast.TemperatureF" Category="Contains" />
+<Link Source = "WeatherForecast" Target="WeatherForecast.UserName" Category="Contains" />
+  </Links>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="EntityType" ValueLabel="True">
+      <Condition Expression="HasCategory('EntityType')" />
+      <Setter Property="Background" Value="#FFC0C0C0" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Property Primary" ValueLabel="True">
+      <Condition Expression="HasCategory('Property Primary')" />
+      <Setter Property="Background" Value="#FF008000" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Property Optional" ValueLabel="True">
+      <Condition Expression="HasCategory('Property Optional')" />
+      <Setter Property="Background" Value="#FF808040" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Property Foreign" ValueLabel="True">
+      <Condition Expression="HasCategory('Property Foreign')" />
+      <Setter Property="Background" Value="#FF8080FF" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Property Required" ValueLabel="True">
+      <Condition Expression="HasCategory('Property Required')" />
+      <Setter Property="Background" Value="#FFC0A000" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Navigation Property" ValueLabel="True">
+      <Condition Expression="HasCategory('Navigation Property')" />
+      <Setter Property="Background" Value="#FF990000" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Navigation Collection" ValueLabel="True">
+      <Condition Expression="HasCategory('Navigation Collection')" />
+      <Setter Property="Background" Value="#FFFF3232" />
+    </Style>
+    <Style TargetType="Node" GroupLabel="Model" ValueLabel="True">
+      <Condition Expression="HasCategory('Model')" />
+      <Setter Property="Background" Value="#FFFFFFFF" />
+    </Style>
+  </Styles>
+  <Properties>
+    <Property Id="Name" Group="Model Properties" DataType="System.String" />
+    <Property Id="Field"  Description="Backing field" Group="Model Properties" DataType="System.String" />
+    <Property Id="Type"  Description="CLR data type" Group="Model Properties" DataType="System.String" />
+    <Property Id="To" Description="Source property" Group="Model Properties" DataType="System.String" />
+    <Property Id="From" Description="Target property" Group="Model Properties" DataType="System.String" />
+    <Property Id="Dependent" Description="Dependent entity" Group="Model Properties" DataType="System.String" />
+    <Property Id="Inverse" Description="Inverse entity" Group="Model Properties" DataType="System.String" />
+    <Property Id="Principal" Description="Principal entity" Group="Model Properties" DataType="System.String" />    
+    <Property Id="Annotations" Description="Annotations" Group="Model Properties" DataType="System.String" />
+    <Property Id="BaseClass"  Description="Base class" Group="Model Properties" DataType="System.String" />
+    <Property Id="ChangeTrackingStrategy" Description="Change tracking strategy" Group="Model Properties" DataType="System.String" />
+    <Property Id="IsUnique" Group="Model Properties" DataType="System.Boolean" />
+    <Property Id="IsAbstract" Group="Model Properties" DataType="System.Boolean" />
+    <Property Id="ProductVersion" Label="Product Version" Description="EF Core product version" Group="Model Properties" DataType="System.String" />
+    <Property Id="IsIndexed" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsRequired" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsPrimaryKey" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsForeignKey" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsShadow" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsAlternateKey" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsConcurrencyToken" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsIndexed" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="IsUnicode" Group="Property Flags" DataType="System.Boolean" />
+    <Property Id="ValueGenerated" Group="Property Flags" DataType="System.String" />
+    <Property Id="BeforeSaveBehavior" Group="Property Flags" DataType="System.String" />
+    <Property Id="AfterSaveBehavior" Group="Property Flags" DataType="System.String" />
+    <Property Id="PropertyAccessMode" Group="Property Flags" DataType="System.String" />
+  </Properties>
+</DirectedGraph>
