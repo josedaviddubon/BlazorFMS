@@ -21,14 +21,14 @@ namespace BlazorFMS.Data
         //         .AsNoTracking().ToListAsync();
         //}
         
-        public Task<Viaje> CreateViajetAsync(Viaje obViaje)
+        public Task<Viajes> CreateViajetAsync(Viajes obViaje)
         {
             _context.Viaje.Add(obViaje);
             _context.SaveChanges();
             return Task.FromResult(obViaje);
         }
 
-        public Task<bool> UpdateViajeAsync(Viaje obViaje)
+        public Task<bool> UpdateViajeAsync(Viajes obViaje)
         {
             var ExistingViaje =
                 _context.Viaje
@@ -55,7 +55,7 @@ namespace BlazorFMS.Data
             return Task.FromResult(true);
         }
 
-        public Task<bool> DeleteViajeAsync(Viaje obViaje)
+        public Task<bool> DeleteViajeAsync(Viajes obViaje)
         {
             var ExistingViaje =
                 _context.Viaje

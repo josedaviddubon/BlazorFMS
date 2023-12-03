@@ -2,11 +2,10 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace BlazorFMS.Data.BlazorFMS;
 
-public partial class SucursalDetalles
+public partial class SucursalDetalle
 {
     public int SucursalDetalleId { get; set; }
 
@@ -14,13 +13,11 @@ public partial class SucursalDetalles
 
     public int? ColaboradorId { get; set; }
 
-    [Range(typeof(int), "0", "50",
-       ErrorMessage =
-       "Ingrese un rango de valido en Distancia Kilometros(0 entre 50).")]
-
     public decimal? DistanciaKilometros { get; set; }
 
-    public virtual Colaboradores Colaborador { get; set; }
+    public string UserName { get; set; }
 
-    public virtual Sucursales Sucursal { get; set; }
+    public virtual Colaborador Colaborador { get; set; }
+
+    public virtual Sucursal Sucursal { get; set; }
 }

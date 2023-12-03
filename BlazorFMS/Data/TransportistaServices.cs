@@ -10,7 +10,7 @@ namespace BlazorFMS.Data
         {
             _context = context;
         }
-        public async Task<List<Transportistas>> GetTransportistaAsync(string strCurrentUser)
+        public async Task<List<Transportista>> GetTransportistaAsync(string strCurrentUser)
         {
             // Get Weather Forecasts  
             return await _context.Transportista
@@ -20,14 +20,14 @@ namespace BlazorFMS.Data
                  // Use ToListAsync to avoid blocking a thread
                  .AsNoTracking().ToListAsync();
         }
-        public Task<Transportistas> CreateTransportistaAsync(Transportistas obTransportista)
+        public Task<Transportista> CreateTransportistaAsync(Transportista obTransportista)
         {
             _context.Transportista.Add(obTransportista);
             _context.SaveChanges();
             return Task.FromResult(obTransportista);
         }
 
-        public Task<bool> UpdateTransportistaAsync(Transportistas obTransportista)
+        public Task<bool> UpdateTransportistaAsync(Transportista obTransportista)
         {
             var ExistingTransportista =
                 _context.Transportista
@@ -54,7 +54,7 @@ namespace BlazorFMS.Data
             return Task.FromResult(true);
         }
 
-        public Task<bool> DeleteTransportistaAsync(Transportistas obTransportista)
+        public Task<bool> DeleteTransportistaAsync(Transportista obTransportista)
         {
             var ExistingTransportista =
                 _context.Transportista

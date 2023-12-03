@@ -17,9 +17,9 @@ public partial class BlaFMSContext : DbContext
 
     public virtual DbSet<Sucursales> Sucursal { get; set; }
 
-    public virtual DbSet<SucursalDetalles> SucursalDetalle { get; set; }
+    public virtual DbSet<SucursalDetalle> SucursalDetalle { get; set; }
 
-    public virtual DbSet<Transportistas> Transportista { get; set; }
+    public virtual DbSet<Transportista> Transportista { get; set; }
 
     public virtual DbSet<Viaje> Viaje { get; set; }
 
@@ -59,7 +59,7 @@ public partial class BlaFMSContext : DbContext
             entity.Property(e => e.UserName).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<SucursalDetalles>(entity =>
+        modelBuilder.Entity<SucursalDetalle>(entity =>
         {
             entity.HasKey(e => e.SucursalDetalleId).HasName("PK__Sucursal__A0C310A2BB9143DF");
 
@@ -69,6 +69,7 @@ public partial class BlaFMSContext : DbContext
             entity.Property(e => e.ColaboradorId).HasColumnName("ColaboradorID");
             entity.Property(e => e.DistanciaKilometros).HasColumnType("decimal(10, 2)");
             entity.Property(e => e.SucursalId).HasColumnName("SucursalID");
+            entity.Property(e => e.UserName).HasMaxLength(50);
 
             entity.HasOne(d => d.Colaborador).WithMany(p => p.SucursalDetalle)
                 .HasForeignKey(d => d.ColaboradorId)
@@ -79,7 +80,7 @@ public partial class BlaFMSContext : DbContext
                 .HasConstraintName("FK__SucursalD__Sucur__5DCAEF64");
         });
 
-        modelBuilder.Entity<Transportistas>(entity =>
+        modelBuilder.Entity<Transportista>(entity =>
         {
             entity.HasKey(e => e.TransportistaId).HasName("PK__Transpor__A26C7F55584836DA");
 

@@ -31,6 +31,7 @@ builder.Services.AddScoped<WeatherForecastService>();
 builder.Services.AddScoped<ColaboradorServices>();
 builder.Services.AddScoped<SucursalService>();
 builder.Services.AddScoped<TransportistaServices>();
+builder.Services.AddScoped<AdministrarSucursalesServices>();
 
 //builder.Services.AddScoped<IColaboradorServices, ColaboradorServices>();
 

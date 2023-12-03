@@ -15,12 +15,11 @@ namespace BlazorFMS.Data
         }
         public async Task<List<Colaboradores>> GetColaboradorAsync(string strCurrentUser)
         {
-            // Get Weather Forecasts  
+             
             return await _context.Colaborador
-                 // Only get entries for the current logged in user
+                 
                  .Where(x => x.UserName == strCurrentUser)
-                 // Use AsNoTracking to disable EF change tracking
-                 // Use ToListAsync to avoid blocking a thread
+
                  .AsNoTracking().ToListAsync();
         }
         public Task<Colaboradores> CreateColaboradorAsync(Colaboradores objColaborador)

@@ -1,17 +1,17 @@
-﻿@page "/sucursales"
+﻿@page "/administrar"
 @using BlazorFMS.Data
 @using BlazorFMS.Data.BlazorFMS
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
-@inherits OwningComponentBase<SucursalService>
-<h1>Sucursal</h1>
+@inherits OwningComponentBase<AdministrarSucursalesServices>
+<h1>Administrar Sucursal</h1>
 
 <AuthorizeView>
     <!-- Show this section if the user is logged in -->
     <Authorized>
         <h4>Hola, @context.User.Identity?.Name!</h4>
-        @if (sucursales == null)
+        @if (Detsucursales == null)
         {
             <!-- Show this if the current user has no data... yet... -->
             <p><em>Loading...</em></p>
@@ -21,23 +21,24 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Sucursal ID</th>
-                        <th>Nombre</th>
-                        <th>Ubicacion</th>
+                        <th>ID Sucursal</th>
+                        <th>Nombre Colaborador</th>
+                        <th>DistanciaKilometros</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var sucursal in sucursales)
+                    @foreach (var Detsucursales in Detsucursales)
                     {
                         <tr>
-                            <td>@sucursal.SucursalId</td>
-                            <td>@sucursal.Nombre</td>
-                            <td>@sucursal.Ubicacion</td>
+                            <td value="@Detsucursales.SucursalId">@objSucursales.Nombre</td>
+                            <td value="@Detsucursales.ColaboradorId">@objColaborador.Nombre</td>
+                            <td>@Detsucursales.DistanciaKilometros</td>
+
                             <td>
                                 <!-- Edit the current forecast -->
                                 <button class="btn btn-primary"
-                                @onclick="(() => EditSucursal(sucursal))">
+                                @onclick="(() => EditDetalle(Detsucursales))">
                                     Edit
                                 </button>
                             </td>
@@ -46,7 +47,7 @@
                 </tbody>
             </table>
             <p>
-                <button class="btn btn-primary" @onclick="AddNewSucursal">Agregar nueva Sucursal</button>
+                <button class="btn btn-primary" @onclick="AddNewDet">Agregar nueva Sucursal</button>
             </p>
             @if (ShowPopup)
             {
@@ -61,9 +62,10 @@
                                     <span aria-hidden="true">X</span>
                                 </button>
                             </div>
+                            <!-- Edit form for the current forecast -->
                             <EditForm Context="formContext"
-                              Model="objSucursales"
-                              OnValidSubmit="SaveSucursal">
+                              Model="objDetalles"
+                              OnValidSubmit="SaveDet">
                                 <DataAnnotationsValidator />
                                 <ul class="validation-errors">
                                     @foreach (
@@ -74,55 +76,71 @@
                                     }
                                 </ul>
                                 <div class="modal-body">
+
                                     <p>
-                                        <label for="Nombre">Nombre Completo: </label>
-                                        <InputText id="nombre" class="form-control"
-                                           placeholder="Nombre Completo"
-                                           @bind-Value="objSucursales.Nombre" />
-                                    </p>
-                                    <p>
-                                        <label for="Ubicacion">Ubicacion: </label>
-                                        <InputText id="nombre" class="form-control"
-                                           placeholder="Ubicacion"
-                                           @bind-Value="objSucursales.Ubicacion" />
+                                        <label for="SucursalId">Sucursal: </label>
+                                        <InputSelect id="SucursalId" class="form-control"
+                                             @bind-Value="objSucursales.SucursalId">
+                                            @foreach (var sucursales in sucursales)
+                                            {
+                                                <option value="@sucursales.SucursalId">@sucursales.Nombre</option>
+                                            }
+
+                                        </InputSelect>
+                                        <ValidationMessage For="@(() => objSucursales.SucursalId)" />
                                     </p>
 
                                     <p>
-                                        <label for="Colaborador">Colaborador: </label>
-                                        <InputSelect id="Colaborador" class="form-control"
+                                        <label for="ColaboradorId">Colaborador: </label>
+                                        <InputSelect id="ColaboradorId" class="form-control"
                                              @bind-Value="objColaborador.ColaboradorId">
                                             @foreach (var colaborador in colaboradores)
                                             {
-                                            <option value="@colaborador.ColaboradorId">@colaborador.Nombre</option>
+                                                <option value="@colaborador.ColaboradorId">@colaborador.Nombre</option>
                                             }
-                                            
+
                                         </InputSelect>
                                         <ValidationMessage For="@(() => objColaborador.ColaboradorId)" />
                                     </p>
+
+
+                                    <p>
+                                        <label for="DistanciaKilometros">Distancia Kilometros: </label>
+                                        <InputNumber id="DistanciaKilometros" class="form-control"
+                                             placeholder="DistanciaKilometros"
+                                             @bind-Value="objDetalles.DistanciaKilometros" />
+                                    </p>
+
+
                                     <br />
 
                                     <button class="btn btn-primary"
                                     type="submit">
                                         Save
                                     </button>
-                                   
-                                    @if (objSucursales.SucursalId > 0)
+
+                                    @if (objDetalles.SucursalDetalleId > 0)
                                     {
-                                       
-                                        <button class="btn btn-primary"
-                                    @onclick="DeleteSucursal">
+
+                                        <button class="btn btn-primary">
+
                                             Delete
                                         </button>
                                     }
                                 </div>
 
                             </EditForm>
+
+
                         </div>
                     </div>
                 </div>
+
             }
 
         }
+
+
     </Authorized>
 
     <!-- Show this section if the user is not logged in -->
@@ -132,13 +150,13 @@
 </AuthorizeView>
 
 @code {
-
-
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationStateTask { get; set; }
-    List<Sucursales> sucursales = new List<Sucursales>();
-    private string UserIdentityName = "";
+    List<SucursalDetalle> Detsucursales = new List<SucursalDetalle>();
     List<Colaboradores> colaboradores = new List<Colaboradores>();
+    List<Sucursales> sucursales = new List<Sucursales>();
+
+    private string UserIdentityName = "";
     protected override async Task OnInitializedAsync()
     {
         // Get the current user
@@ -150,14 +168,17 @@
                 UserIdentityName = user.Identity.Name ?? "";
             }
         }
-        sucursales = await @Service.GetSucursalAsync(UserIdentityName);
+        Detsucursales = await @Service.GetDetalleAsync(UserIdentityName);
+
         colaboradores = await @Service.GetColaboradoresAsync(UserIdentityName);
+
+        sucursales = await @Service.GetSucursalesAsync(UserIdentityName);
     }
 
 
-    Sucursales objSucursales = new Sucursales();
+    SucursalDetalle objDetalles = new SucursalDetalle();
     Colaboradores objColaborador = new Colaboradores();
-    SucursalDetalle objDetSucursales = new SucursalDetalle();
+    Sucursales objSucursales = new Sucursales();
 
     bool ShowPopup = false;
     void ClosePopup()
@@ -165,77 +186,50 @@
         // Close the Popup
         ShowPopup = false;
     }
-    void AddNewSucursal()
+    void AddNewDet()
     {
         // Make new forecast
-        objSucursales = new Sucursales();
-        objDetSucursales = new SucursalDetalle();
-        objColaborador = new Colaboradores();
-
-
+        objDetalles = new SucursalDetalle();
         // Set Id to 0 so we know it is a new record
-        objSucursales.SucursalId = 0;
+        objDetalles.SucursalDetalleId = 0;
         // Open the Popup
         ShowPopup = true;
     }
-    async Task SaveSucursal()
+
+
+    async Task SaveDet()
     {
         // Close the Popup
         ShowPopup = false;
 
-        if (objSucursales.SucursalId == 0)
+        if (objDetalles.SucursalDetalleId == 0)
         {
 
-            Sucursales objNewSucursales = new Sucursales();
-            objNewSucursales.Nombre = objSucursales.Nombre;
-            objNewSucursales.Ubicacion = objSucursales.Ubicacion;
-            objNewSucursales.UserName = UserIdentityName;
-
+            SucursalDetalle objNewDet = new SucursalDetalle();
+            objNewDet.ColaboradorId = objDetalles.ColaboradorId;
+            objNewDet.SucursalId = objDetalles.SucursalId;
+            objNewDet.DistanciaKilometros = objDetalles.DistanciaKilometros;
+            objNewDet.UserName = UserIdentityName;
             var result =
-            @Service.CreateSucursalAsync(objNewSucursales);
-
-            SucursalDetalle detalle = new SucursalDetalle();
-            {
-                detalle.ColaboradorId = objDetSucursales.ColaboradorId; // Colaborador seleccionado
-
-                if(objDetSucursales.DistanciaKilometros <= 0 && objDetSucursales.DistanciaKilometros >= 50)
-                {
-                    detalle.DistanciaKilometros = objDetSucursales.DistanciaKilometros;
-                }
-            };
-            
-
+            @Service.CreateDetalleAsync(objNewDet);
         }
         else
         {
             var result =
-          @Service.UpdateSucursalAsync(objSucursales);
+          @Service.UpdateDetalleAsync(objDetalles);
         }
         // Get the forecasts for the current user
-        sucursales =
-        await @Service.GetSucursalAsync(UserIdentityName);
+        Detsucursales =
+        await @Service.GetDetalleAsync(UserIdentityName);
 
     }
 
 
-
-
-    void EditSucursal(Sucursales sucursales)
+    void EditDetalle(SucursalDetalle detalles)
     {
 
-        objSucursales = sucursales;
+        objDetalles = detalles;
         // Open the Popup
         ShowPopup = true;
-    }
-
-    async Task DeleteSucursal()
-    {
-
-        ShowPopup = false;
-
-        var result = @Service.DeleteSucursalAsync(objSucursales);
-
-        sucursales =
-        await @Service.GetSucursalAsync(UserIdentityName);
     }
 }

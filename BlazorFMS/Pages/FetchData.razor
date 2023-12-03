@@ -1,34 +1,26 @@
 ﻿@page "/fetchdata"
 @using BlazorFMS.Data
 @using BlazorFMS.Data.BlazorFMS
-
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @*
-    Using OwningComponentBase ensures that the service and related services
-    that share its scope are disposed with the component.
-    Otherwise DbContext in ForecastService will live for the life of the
-    connection, which may be problematic if clients stay
-    connected for a long time.
 
-    We access WeatherForecastService using @Service
 *@
 @inherits OwningComponentBase<WeatherForecastService>
 
 <h1>Weather forecast</h1>
-<!-- AuthorizeView allows us to only show sections of the page -->
-<!-- based on the security on the current user -->
+
 <AuthorizeView>
-    <!-- Show this section if the user is logged in -->
+
     <Authorized>
         <h4>Hello, @context.User.Identity.Name!</h4>
         @if (forecasts == null)
         {
-            <!-- Show this if the current user has no data... yet... -->
+            
             <p><em>Loading...</em></p>
         }
         else
         {
-            <!-- Show the forecasts for the current user -->
+           
             <table class="table">
                 <thead>
                     <tr>
@@ -48,7 +40,7 @@
                             <td>@forecast.TemperatureF</td>
                             <td>@forecast.Summary</td>
                             <td>
-                                <!-- Edit the current forecast -->
+                              
                                 <button class="btn btn-primary"
                                 @onclick="(() => EditForecast(forecast))">
                                     Edit
@@ -59,7 +51,7 @@
                 </tbody>
             </table>
             <p>
-                <!-- Add a new forecast -->
+               
                 <button class="btn btn-primary"
                     @onclick="AddNewForecast">
                     Add New Forecast
@@ -69,7 +61,7 @@
 
             @if (ShowPopup)
             {
-                <!-- This is the popup to create or edit a forecast -->
+                
                 <div class="modal" tabindex="-1" style="display:block" role="dialog">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -157,13 +149,11 @@
         <p>You're not signed in.</p>
     </NotAuthorized>
 </AuthorizeView>
-
-@code
-{
+@code {
     // AuthenticationState is available as a CascadingParameter
     [CascadingParameter]
-    private Task<AuthenticationState>? authenticationStateTask { get; set; }
-    List<WeatherForecast> forecasts = new List<WeatherForecast>();
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+    List<WeatherForecast> forecasts;
 
     List<WeatherForecastOptions> SummaryOptions = new List<WeatherForecastOptions>() {
     new WeatherForecastOptions() { OptionName = "Select...", OptionValue = " " },
@@ -171,25 +161,20 @@
         new WeatherForecastOptions() { OptionName = "Mild", OptionValue = "Mild" },
         new WeatherForecastOptions() { OptionName = "Cold", OptionValue = "Cold" }};
 
-
-
-    private string UserIdentityName = "";
     protected override async Task OnInitializedAsync()
     {
         // Get the current user
-        if (authenticationStateTask != null)
-        {
-            var user = (await authenticationStateTask).User;
-            if (user.Identity != null)
-            {
-                UserIdentityName = user.Identity.Name ?? "";
-            }
-        }
+        var user = (await authenticationStateTask).User;
+
         // Get the forecasts for the current user
         // We access WeatherForecastService using @Service
-        forecasts = await @Service.GetForecastAsync(UserIdentityName);
+        forecasts = await @Service.GetForecastAsync(user.Identity.Name);
     }
+
+
+
     WeatherForecast objWeatherForecast = new WeatherForecast();
+
     bool ShowPopup = false;
     void ClosePopup()
     {
@@ -209,32 +194,35 @@
     {
         // Close the Popup
         ShowPopup = false;
+        // Get the current user
+        var user = (await authenticationStateTask).User;
         // A new forecast will have the Id set to 0
         if (objWeatherForecast.Id == 0)
         {
             // Create new forecast
             WeatherForecast objNewWeatherForecast = new WeatherForecast();
-            objNewWeatherForecast.Date = System.DateTime.Now;
+            objNewWeatherForecast.Date = objWeatherForecast.Date;
             objNewWeatherForecast.Summary = objWeatherForecast.Summary;
             objNewWeatherForecast.TemperatureC =
             Convert.ToInt32(objWeatherForecast.TemperatureC);
             objNewWeatherForecast.TemperatureF =
             Convert.ToInt32(objWeatherForecast.TemperatureF);
-            objNewWeatherForecast.UserName = UserIdentityName;
+            objNewWeatherForecast.UserName = user.Identity.Name;
             // Save the result
             var result =
             @Service.CreateForecastAsync(objNewWeatherForecast);
         }
         else
         {
+            // This is an update
             var result =
-          @Service.UpdateForecastAsync(objWeatherForecast);
+            @Service.UpdateForecastAsync(objWeatherForecast);
         }
         // Get the forecasts for the current user
         forecasts =
-        await @Service.GetForecastAsync(UserIdentityName);
-
+        await @Service.GetForecastAsync(user.Identity.Name);
     }
+
     void EditForecast(WeatherForecast weatherForecast)
     {
         // Set the selected forecast
@@ -243,14 +231,21 @@
         // Open the Popup
         ShowPopup = true;
     }
+
     async Task DeleteForecast()
     {
-      
+        // Close the Popup
         ShowPopup = false;
-      
+
+        // Get the current user
+        var user = (await authenticationStateTask).User;
+
+        // Delete the forecast
         var result = @Service.DeleteForecastAsync(objWeatherForecast);
-       
+
+        // Get the forecasts for the current user
         forecasts =
-        await @Service.GetForecastAsync(UserIdentityName);
+        await @Service.GetForecastAsync(user.Identity.Name);
     }
+
 }

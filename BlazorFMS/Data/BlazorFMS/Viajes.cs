@@ -21,5 +21,5 @@ public partial class Viaje
 
     public virtual Colaboradores Colaborador { get; set; }
 
-    public virtual Transportistas Transportista { get; set; }
+    public virtual Transportista Transportista { get; set; }
 }

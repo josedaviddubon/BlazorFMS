@@ -15,7 +15,7 @@ public partial class Colaboradores
 
     public string UserName { get; set; }
 
-    public virtual ICollection<SucursalDetalles> SucursalDetalle { get; set; } = new List<SucursalDetalles>();
+    public virtual ICollection<SucursalDetalle> SucursalDetalle { get; set; } = new List<SucursalDetalle>();
 
     public virtual ICollection<Viaje> Viaje { get; set; } = new List<Viaje>();
 }
