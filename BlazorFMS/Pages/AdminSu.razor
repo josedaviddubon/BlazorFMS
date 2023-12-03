@@ -31,8 +31,8 @@
                     @foreach (var Detsucursales in Detsucursales)
                     {
                         <tr>
-                            <td value="@Detsucursales.SucursalId">@objSucursales.Nombre</td>
-                            <td value="@Detsucursales.ColaboradorId">@objColaborador.Nombre</td>
+                            <td>@Detsucursales.SucursalId</td>
+                            <td>@Detsucursales.ColaboradorId</td>
                             <td>@Detsucursales.DistanciaKilometros</td>
 
                             <td>
@@ -152,7 +152,7 @@
 @code {
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationStateTask { get; set; }
-    List<SucursalDetalle> Detsucursales = new List<SucursalDetalle>();
+    List<SucursalDetalles> Detsucursales = new List<SucursalDetalles>();
     List<Colaboradores> colaboradores = new List<Colaboradores>();
     List<Sucursales> sucursales = new List<Sucursales>();
 
@@ -176,7 +176,7 @@
     }
 
 
-    SucursalDetalle objDetalles = new SucursalDetalle();
+    SucursalDetalles objDetalles = new SucursalDetalles();
     Colaboradores objColaborador = new Colaboradores();
     Sucursales objSucursales = new Sucursales();
 
@@ -189,7 +189,7 @@
     void AddNewDet()
     {
         // Make new forecast
-        objDetalles = new SucursalDetalle();
+        objDetalles = new SucursalDetalles();
         // Set Id to 0 so we know it is a new record
         objDetalles.SucursalDetalleId = 0;
         // Open the Popup
@@ -205,9 +205,9 @@
         if (objDetalles.SucursalDetalleId == 0)
         {
 
-            SucursalDetalle objNewDet = new SucursalDetalle();
-            objNewDet.ColaboradorId = objDetalles.ColaboradorId;
-            objNewDet.SucursalId = objDetalles.SucursalId;
+            SucursalDetalles objNewDet = new SucursalDetalles();
+            objNewDet.ColaboradorId = objColaborador.ColaboradorId;
+            objNewDet.SucursalId = objSucursales.SucursalId;
             objNewDet.DistanciaKilometros = objDetalles.DistanciaKilometros;
             objNewDet.UserName = UserIdentityName;
             var result =
@@ -225,7 +225,7 @@
     }
 
 
-    void EditDetalle(SucursalDetalle detalles)
+    void EditDetalle(SucursalDetalles detalles)
     {
 
         objDetalles = detalles;

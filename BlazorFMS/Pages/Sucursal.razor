@@ -28,16 +28,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var sucursal in sucursales)
+                    @foreach (var sucursales in sucursales)
                     {
                         <tr>
-                            <td>@sucursal.SucursalId</td>
-                            <td>@sucursal.Nombre</td>
-                            <td>@sucursal.Ubicacion</td>
+                            <td>@sucursales.SucursalId</td>
+                            <td>@sucursales.Nombre</td>
+                            <td>@sucursales.Ubicacion</td>
                             <td>
                                 <!-- Edit the current forecast -->
                                 <button class="btn btn-primary"
-                                @onclick="(() => EditSucursal(sucursal))">
+                                @onclick="(() => EditSucursal(sucursales))">
                                     Edit
                                 </button>
                             </td>
@@ -61,68 +61,47 @@
                                     <span aria-hidden="true">X</span>
                                 </button>
                             </div>
-                            <EditForm Context="formContext"
-                              Model="objSucursales"
-                              OnValidSubmit="SaveSucursal">
-                                <DataAnnotationsValidator />
-                                <ul class="validation-errors">
-                                    @foreach (
-                                   var message in formContext.GetValidationMessages()
-                                   .Where(x => !x.Contains("Colaborador")))
-                                    {
-                                        <li class="validation-message">@message</li>
-                                    }
-                                </ul>
-                                <div class="modal-body">
-                                    <p>
-                                        <label for="Nombre">Nombre Completo: </label>
-                                        <InputText id="nombre" class="form-control"
-                                           placeholder="Nombre Completo"
-                                           @bind-Value="objSucursales.Nombre" />
-                                    </p>
-                                    <p>
-                                        <label for="Ubicacion">Ubicacion: </label>
-                                        <InputText id="nombre" class="form-control"
-                                           placeholder="Ubicacion"
-                                           @bind-Value="objSucursales.Ubicacion" />
-                                    </p>
+                            <!-- Edit form for the current forecast -->
+                            <div class="modal-body">
+                                <div class="form-container">
 
-                                    <p>
-                                        <label for="Colaborador">Colaborador: </label>
-                                        <InputSelect id="Colaborador" class="form-control"
-                                             @bind-Value="objColaborador.ColaboradorId">
-                                            @foreach (var colaborador in colaboradores)
-                                            {
-                                            <option value="@colaborador.ColaboradorId">@colaborador.Nombre</option>
-                                            }
-                                            
-                                        </InputSelect>
-                                        <ValidationMessage For="@(() => objColaborador.ColaboradorId)" />
-                                    </p>
-                                    <br />
+                                    <div class="form-group">
+                                        <label for="nombre">Nombre:</label>
+                                        <input class="form-control" type="text" placeholder="Nombre" @bind="objSucursales.Nombre" />
+                                    </div>
 
-                                    <button class="btn btn-primary"
-                                    type="submit">
-                                        Save
-                                    </button>
-                                   
-                                    @if (objSucursales.SucursalId > 0)
-                                    {
-                                       
-                                        <button class="btn btn-primary"
-                                    @onclick="DeleteSucursal">
-                                            Delete
-                                        </button>
-                                    }
+                                    <div class="form-group">
+                                        <label for="direccion">Ubicacion</label>
+                                        <input class="form-control" type="text" id="direccion" @bind="objSucursales.Ubicacion" />
+                                    </div>
                                 </div>
-
-                            </EditForm>
+                                <br />
+                                <!-- Button to save the forecast -->
+                                <button class="btn btn-success"
+                                @onclick="SaveSucursal">
+                                    Save
+                                </button>&nbsp;
+                                @if (objSucursales.SucursalId > 0)
+                                {
+                                    <!-- Button to delete the forecast -->
+                                    <button class="btn btn-danger"
+                                @onclick="DeleteSucursal">
+                                        Delete
+                                    </button>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
+                @if (ShowPopup)
+                {
+
+                }
             }
 
         }
+
+
     </Authorized>
 
     <!-- Show this section if the user is not logged in -->
@@ -131,6 +110,8 @@
     </NotAuthorized>
 </AuthorizeView>
 
+
+
 @code {
 
 
@@ -138,7 +119,6 @@
     private Task<AuthenticationState>? authenticationStateTask { get; set; }
     List<Sucursales> sucursales = new List<Sucursales>();
     private string UserIdentityName = "";
-    List<Colaboradores> colaboradores = new List<Colaboradores>();
     protected override async Task OnInitializedAsync()
     {
         // Get the current user
@@ -151,13 +131,10 @@
             }
         }
         sucursales = await @Service.GetSucursalAsync(UserIdentityName);
-        colaboradores = await @Service.GetColaboradoresAsync(UserIdentityName);
     }
 
 
     Sucursales objSucursales = new Sucursales();
-    Colaboradores objColaborador = new Colaboradores();
-    SucursalDetalle objDetSucursales = new SucursalDetalle();
 
     bool ShowPopup = false;
     void ClosePopup()
@@ -169,10 +146,6 @@
     {
         // Make new forecast
         objSucursales = new Sucursales();
-        objDetSucursales = new SucursalDetalle();
-        objColaborador = new Colaboradores();
-
-
         // Set Id to 0 so we know it is a new record
         objSucursales.SucursalId = 0;
         // Open the Popup
@@ -190,21 +163,8 @@
             objNewSucursales.Nombre = objSucursales.Nombre;
             objNewSucursales.Ubicacion = objSucursales.Ubicacion;
             objNewSucursales.UserName = UserIdentityName;
-
             var result =
             @Service.CreateSucursalAsync(objNewSucursales);
-
-            SucursalDetalle detalle = new SucursalDetalle();
-            {
-                detalle.ColaboradorId = objDetSucursales.ColaboradorId; // Colaborador seleccionado
-
-                if(objDetSucursales.DistanciaKilometros <= 0 && objDetSucursales.DistanciaKilometros >= 50)
-                {
-                    detalle.DistanciaKilometros = objDetSucursales.DistanciaKilometros;
-                }
-            };
-            
-
         }
         else
         {
@@ -216,10 +176,6 @@
         await @Service.GetSucursalAsync(UserIdentityName);
 
     }
-
-
-
-
     void EditSucursal(Sucursales sucursales)
     {
 

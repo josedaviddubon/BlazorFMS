@@ -21,14 +21,14 @@ namespace BlazorFMS.Data
         //         .AsNoTracking().ToListAsync();
         //}
         
-        public Task<Viajes> CreateViajetAsync(Viajes obViaje)
+        public Task<Viaje> CreateViajetAsync(Viaje obViaje)
         {
             _context.Viaje.Add(obViaje);
             _context.SaveChanges();
             return Task.FromResult(obViaje);
         }
 
-        public Task<bool> UpdateViajeAsync(Viajes obViaje)
+        public Task<bool> UpdateViajeAsync(Viaje obViaje)
         {
             var ExistingViaje =
                 _context.Viaje
@@ -40,12 +40,6 @@ namespace BlazorFMS.Data
                 obViaje.Distancia;
                 ExistingViaje.Fecha =
                 obViaje.Fecha;
-                /*
-                ExistingColaborador.TemperatureC =
-                obColaborador.TemperatureC;
-                ExistingColaborador.TemperatureF =
-                obColaborador.TemperatureF;
-                */
                 _context.SaveChanges();
             }
             else
@@ -55,7 +49,7 @@ namespace BlazorFMS.Data
             return Task.FromResult(true);
         }
 
-        public Task<bool> DeleteViajeAsync(Viajes obViaje)
+        public Task<bool> DeleteViajeAsync(Viaje obViaje)
         {
             var ExistingViaje =
                 _context.Viaje

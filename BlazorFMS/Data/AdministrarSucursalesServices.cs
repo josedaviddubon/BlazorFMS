@@ -14,7 +14,7 @@ namespace BlazorFMS.Data
             _context = context;
         }
 
-        public async Task<List<SucursalDetalle>> GetDetalleAsync(string strCurrentUser)
+        public async Task<List<SucursalDetalles>> GetDetalleAsync(string strCurrentUser)
         {
             // Get Weather Forecasts  
             return await _context.SucursalDetalle
@@ -44,14 +44,14 @@ namespace BlazorFMS.Data
         }
 
 
-        public Task<SucursalDetalle> CreateDetalleAsync(SucursalDetalle objSucursalDetalles)
+        public Task<SucursalDetalles> CreateDetalleAsync(SucursalDetalles objSucursalDetalles)
         {
             _context.SucursalDetalle.Add(objSucursalDetalles);
             _context.SaveChanges();
             return Task.FromResult(objSucursalDetalles);
         }
 
-        public Task<bool> UpdateDetalleAsync(SucursalDetalle objSucursalDetalles)
+        public Task<bool> UpdateDetalleAsync(SucursalDetalles objSucursalDetalles)
         {
             var DetalleExiste =
                 _context.SucursalDetalle

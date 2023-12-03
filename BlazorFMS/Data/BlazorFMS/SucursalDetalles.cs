@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BlazorFMS.Data.BlazorFMS;
 
-public partial class SucursalDetalle
+public partial class SucursalDetalles
 {
     public int SucursalDetalleId { get; set; }
 
@@ -17,7 +17,7 @@ public partial class SucursalDetalle
 
     public string UserName { get; set; }
 
-    public virtual Colaborador Colaborador { get; set; }
+    public virtual Colaboradores Colaborador { get; set; }
 
-    public virtual Sucursal Sucursal { get; set; }
+    public virtual Sucursales Sucursal { get; set; }
 }
