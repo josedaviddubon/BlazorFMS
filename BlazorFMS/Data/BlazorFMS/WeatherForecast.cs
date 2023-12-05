@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BlazorFMS.Data.BlazorFMS;
+
 public partial class WeatherForecast
 {
     public int Id { get; set; }

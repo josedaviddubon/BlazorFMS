@@ -1,4 +1,5 @@
 ﻿using BlazorFMS.Data.BlazorFMS;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlazorFMS.Data
 {
@@ -9,26 +10,42 @@ namespace BlazorFMS.Data
         {
             _context = context;
         }
-        
-        //public async Task<List<Viaje>> GetViajeAsync(string strCurrentUser)
-        //{
-        //    // Get Weather Forecasts  
-        //    return await _context.Viaje
-        //         // Only get entries for the current logged in user
-        //         .Where(x => x.UserName == strCurrentUser)
-        //         // Use AsNoTracking to disable EF change tracking
-        //         // Use ToListAsync to avoid blocking a thread
-        //         .AsNoTracking().ToListAsync();
-        //}
-        
-        public Task<Viaje> CreateViajetAsync(Viaje obViaje)
+
+        public async Task<List<Viajes>> GetViajeAsync(string strCurrentUser)
+        {
+            // Get Weather Forecasts  
+            return await _context.Viaje
+                 // Only get entries for the current logged in user
+                 .Where(x => x.UserName == strCurrentUser)
+                 // Use AsNoTracking to disable EF change tracking
+                 // Use ToListAsync to avoid blocking a thread
+                 .AsNoTracking().ToListAsync();
+        }
+
+        public async Task<List<Colaboradores>> GetColaboradoresAsync(string strCurrentUser)
+        {
+            return await _context.Colaborador
+                .Where(x => x.UserName == strCurrentUser)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public async Task<List<Transportistas>> GetTransportistasAsync(string strCurrentUser)
+        {
+            return await _context.Transportista
+                .Where(x => x.UserName == strCurrentUser)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public Task<Viajes> CreateViajetAsync(Viajes obViaje)
         {
             _context.Viaje.Add(obViaje);
             _context.SaveChanges();
             return Task.FromResult(obViaje);
         }
 
-        public Task<bool> UpdateViajeAsync(Viaje obViaje)
+        public Task<bool> UpdateViajeAsync(Viajes obViaje)
         {
             var ExistingViaje =
                 _context.Viaje
@@ -49,7 +66,7 @@ namespace BlazorFMS.Data
             return Task.FromResult(true);
         }
 
-        public Task<bool> DeleteViajeAsync(Viaje obViaje)
+        public Task<bool> DeleteViajeAsync(Viajes obViaje)
         {
             var ExistingViaje =
                 _context.Viaje

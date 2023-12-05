@@ -21,7 +21,7 @@ public partial class BlaFMSContext : DbContext
 
     public virtual DbSet<Transportistas> Transportista { get; set; }
 
-    public virtual DbSet<Viaje> Viaje { get; set; }
+    public virtual DbSet<Viajes> Viaje { get; set; }
 
     public virtual DbSet<WeatherForecast> WeatherForecast { get; set; }
 
@@ -71,11 +71,11 @@ public partial class BlaFMSContext : DbContext
             entity.Property(e => e.SucursalId).HasColumnName("SucursalID");
             entity.Property(e => e.UserName).HasMaxLength(50);
 
-            entity.HasOne(d => d.Colaborador).WithMany(p => p.SucursalDetalles)
+            entity.HasOne(d => d.Colaborador).WithMany(p => p.SucursalDetalle)
                 .HasForeignKey(d => d.ColaboradorId)
                 .HasConstraintName("FK__SucursalD__Colab__5EBF139D");
 
-            entity.HasOne(d => d.Sucursal).WithMany(p => p.SucursalDetalles)
+            entity.HasOne(d => d.Sucursal).WithMany(p => p.SucursalDetalle)
                 .HasForeignKey(d => d.SucursalId)
                 .HasConstraintName("FK__SucursalD__Sucur__5DCAEF64");
         });
@@ -93,7 +93,7 @@ public partial class BlaFMSContext : DbContext
             entity.Property(e => e.UserName).HasMaxLength(50);
         });
 
-        modelBuilder.Entity<Viaje>(entity =>
+        modelBuilder.Entity<Viajes>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Viaje__3214EC273A6CFF64");
 

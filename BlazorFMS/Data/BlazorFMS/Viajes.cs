@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace BlazorFMS.Data.BlazorFMS;
 
-public partial class Viaje
+public partial class Viajes
 {
     public int Id { get; set; }
 

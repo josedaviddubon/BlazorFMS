@@ -15,5 +15,5 @@ public partial class Transportistas
 
     public string UserName { get; set; }
 
-    public virtual ICollection<Viaje> Viaje { get; set; } = new List<Viaje>();
+    public virtual ICollection<Viajes> Viaje { get; set; } = new List<Viajes>();
 }

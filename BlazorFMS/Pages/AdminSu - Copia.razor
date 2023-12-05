@@ -1,12 +1,10 @@
-﻿@page "/administrar"
+﻿@page "/administrarse"
 @using BlazorFMS.Data
 @using BlazorFMS.Data.BlazorFMS
-
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
 @inherits OwningComponentBase<AdministrarSucursalesServices>
-@*@inject IToastService toastServices*@
 <h1>Administrar Sucursal</h1>
 
 <AuthorizeView>
@@ -72,6 +70,12 @@
                               OnValidSubmit="SaveDet">
                                 <DataAnnotationsValidator />
                                 <ul class="validation-errors">
+                                    @foreach (
+                                   var message in formContext.GetValidationMessages()
+                                   .Where(x => !x.Contains("Colaborador")))
+                                    {
+                                        <li class="validation-message">@message</li>
+                                    }
                                 </ul>
                                 <div class="modal-body">
 
@@ -79,13 +83,13 @@
                                         <label for="SucursalId">Sucursal: </label>
                                         <InputSelect id="SucursalId" class="form-control"
                                              @bind-Value="objSucursales.SucursalId">
-                                            @foreach (var sucursal in sucursales)
+                                            @foreach (var sucursales in sucursales)
                                             {
-                                                <option value="@sucursal.SucursalId">@sucursal.Nombre</option>
+                                                <option value="@sucursales.SucursalId">@sucursales.Nombre</option>
                                             }
 
                                         </InputSelect>
-                                       @* <ValidationMessage For="@(() => objSucursales.SucursalId)" />*@
+                                        <ValidationMessage For="@(() => objSucursales.SucursalId)" />
                                     </p>
 
                                     <p>
@@ -98,7 +102,7 @@
                                             }
 
                                         </InputSelect>
-                                        @*<ValidationMessage For="@(() => objColaborador.ColaboradorId)" />*@
+                                        <ValidationMessage For="@(() => objColaborador.ColaboradorId)" />
                                     </p>
 
 
@@ -139,7 +143,6 @@
         }
 
 
-
     </Authorized>
 
     <!-- Show this section if the user is not logged in -->
@@ -147,8 +150,6 @@
         <p>Inicia Sesión Para Acceder.</p>
     </NotAuthorized>
 </AuthorizeView>
-
-
 
 @code {
     [CascadingParameter]
@@ -214,35 +215,25 @@
         // Close the Popup
         ShowPopup = false;
 
-        var existingDet = Detsucursales.FirstOrDefault(d => d.SucursalId == objSucursales.SucursalId);
-
-        if (existingDet == null)
+        if (objDetalles.SucursalDetalleId == 0)
         {
-            if (objDetalles.SucursalDetalleId == 0)
-            {
 
-                SucursalDetalles objNewDet = new SucursalDetalles();
-                objNewDet.ColaboradorId = objColaborador.ColaboradorId;
-                objNewDet.SucursalId = objSucursales.SucursalId;
-                objNewDet.DistanciaKilometros = objDetalles.DistanciaKilometros;
-                objNewDet.UserName = UserIdentityName;
-                var result =
-                @Service.CreateDetalleAsync(objNewDet);
-            }
-            else
-            {
-                var result =
-              @Service.UpdateDetalleAsync(objDetalles);
-            }
-            Detsucursales =
-                await @Service.GetDetalleAsync(UserIdentityName);
+            SucursalDetalles objNewDet = new SucursalDetalles();
+            objNewDet.ColaboradorId = objColaborador.ColaboradorId;
+            objNewDet.SucursalId = objSucursales.SucursalId;
+            objNewDet.DistanciaKilometros = objDetalles.DistanciaKilometros;
+            objNewDet.UserName = UserIdentityName;
+            var result =
+            @Service.CreateDetalleAsync(objNewDet);
         }
         else
         {
-            //toastService.ShowWarning("Advertencia El Colaborador Ya tiene asignada esta Sucursal");
-           Console.WriteLine("Advertencia El Colaborador Ya tiene asignada esta Sucursal");
+            var result =
+          @Service.UpdateDetalleAsync(objDetalles);
         }
-
+        // Get the forecasts for the current user
+        Detsucursales =
+        await @Service.GetDetalleAsync(UserIdentityName);
 
     }
 

@@ -1,19 +1,20 @@
-﻿@page "/administrar"
+﻿@page "/viajes"
 @using BlazorFMS.Data
 @using BlazorFMS.Data.BlazorFMS
 
 
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
-@inherits OwningComponentBase<AdministrarSucursalesServices>
+@inherits OwningComponentBase<ViajeService>
 @*@inject IToastService toastServices*@
-<h1>Administrar Sucursal</h1>
+<h1>Viajes</h1>
 
 <AuthorizeView>
     <!-- Show this section if the user is logged in -->
     <Authorized>
         <h4>Hola, @context.User.Identity?.Name!</h4>
-        @if (Detsucursales == null)
+        @if (listviajes
+        == null)
         {
             <!-- Show this if the current user has no data... yet... -->
             <p><em>Loading...</em></p>
@@ -23,26 +24,26 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>ID Sucursal</th>
-                        <th>NombresSucursal</th>
+                        <th>Fecha</th>
+                        <th>Nombre Transportista</th>
                         <th>Nombre Colaborador</th>
-                        <th>DistanciaKilometros</th>
+                        <th>Distancia</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var Detsucursales in Detsucursales)
+                    @foreach (var viaje in listviajes)
                     {
                         <tr>
-                            <td>@Detsucursales.SucursalId</td>
-                            <td>@GetSucursalNombre(Detsucursales.SucursalId)</td>
-                            <td>@GetColaboradorNombre(Detsucursales.ColaboradorId)</td>
-                            <td>@Detsucursales.DistanciaKilometros</td>
+                            <td>@viaje.Fecha</td>
+                            <td>@GetTransportistaNombre(viaje.TransportistaId)</td>
+                            <td>@GetColaboradorNombre(viaje.ColaboradorId)</td>
+                            <td>@viaje.Distancia</td>
 
                             <td>
                                 <!-- Edit the current forecast -->
                                 <button class="btn btn-primary"
-                                @onclick="(() => EditDetalle(Detsucursales))">
+                                @onclick="(() => Edit(viaje))">
                                     Edit
                                 </button>
                             </td>
@@ -51,7 +52,7 @@
                 </tbody>
             </table>
             <p>
-                <button class="btn btn-primary" @onclick="AddNewDet">Agregar nueva Sucursal</button>
+                <button class="btn btn-primary" @onclick="AddNew">Agregar nuevo Viaje</button>
             </p>
             @if (ShowPopup)
             {
@@ -68,27 +69,34 @@
                             </div>
                             <!-- Edit form for the current forecast -->
                             <EditForm Context="formContext"
-                              Model="objDetalles"
-                              OnValidSubmit="SaveDet">
+                              Model="objViajes"
+                              OnValidSubmit="Save">
                                 <DataAnnotationsValidator />
                                 <ul class="validation-errors">
+                                    @foreach (
+                                   var message in formContext.GetValidationMessages()
+                                   .Where(x => !x.Contains("Colaborador")))
+                                    {
+                                        <li class="validation-message">@message</li>
+                                    }
                                 </ul>
                                 <div class="modal-body">
 
                                     <p>
-                                        <label for="SucursalId">Sucursal: </label>
-                                        <InputSelect id="SucursalId" class="form-control"
-                                             @bind-Value="objSucursales.SucursalId">
-                                            @foreach (var sucursal in sucursales)
+                                        <label for="TransportistaId">Transportista: </label>
+                                        <InputSelect id="TransportistaId" class="form-control"
+                                             @bind-Value="objTransportista.TransportistaId">
+                                            @foreach (var transportista in transportistas)
                                             {
-                                                <option value="@sucursal.SucursalId">@sucursal.Nombre</option>
+                                                <option value="@transportista.TransportistaId">@transportista.Nombre</option>
                                             }
 
                                         </InputSelect>
-                                       @* <ValidationMessage For="@(() => objSucursales.SucursalId)" />*@
+                                        <ValidationMessage For="@(() => objTransportista.TransportistaId)" />
                                     </p>
 
-                                    <p>
+
+                                  <p>
                                         <label for="ColaboradorId">Colaborador: </label>
                                         <InputSelect id="ColaboradorId" class="form-control"
                                              @bind-Value="objColaborador.ColaboradorId">
@@ -98,15 +106,32 @@
                                             }
 
                                         </InputSelect>
-                                        @*<ValidationMessage For="@(() => objColaborador.ColaboradorId)" />*@
-                                    </p>
+                                        <ValidationMessage For="@(() => objColaborador.ColaboradorId)" />
+                                    </p>*
+
+@*                                    <p>
+                                        <label>Colaboradores:</label>
+                                        <br />
+                                        @foreach (var colaboradorSeleccionado in colaboradoresSeleccionados)
+                                        {
+                                            <div>
+                                                <label>
+                                                    <InputCheckbox id="@($"chkColaborador_{colaboradorSeleccionado.Colaborador.ColaboradorId}")"
+                                                       @bind-Value="colaboradorSeleccionado.Seleccionado" />
+                                                    @colaboradorSeleccionado.Colaborador.Nombre
+                                                </label>
+                                            </div>
+                                        }
+                                        <ValidationMessage For="@(() => colaboradoresSeleccionados.FirstOrDefault(c => c.Seleccionado)?.Colaborador.ColaboradorId)" />
+
+                                    </p>*@
 
 
                                     <p>
-                                        <label for="DistanciaKilometros">Distancia Kilometros: </label>
-                                        <InputNumber id="DistanciaKilometros" class="form-control"
-                                             placeholder="DistanciaKilometros"
-                                             @bind-Value="objDetalles.DistanciaKilometros" />
+                                        <label for="Distancia">Distancia : </label>
+                                        <InputNumber id="Distancia" class="form-control"
+                                             placeholder="Distancia"
+                                             @bind-Value="objViajes.Distancia" />
                                     </p>
 
 
@@ -117,7 +142,7 @@
                                         Save
                                     </button>
 
-                                    @if (objDetalles.SucursalDetalleId > 0)
+                                    @if (objViajes.Id > 0)
                                     {
 
                                         <button class="btn btn-primary">
@@ -153,9 +178,10 @@
 @code {
     [CascadingParameter]
     private Task<AuthenticationState>? authenticationStateTask { get; set; }
-    List<SucursalDetalles> Detsucursales = new List<SucursalDetalles>();
+    List<Viajes> listviajes = new List<Viajes>();
     List<Colaboradores> colaboradores = new List<Colaboradores>();
-    List<Sucursales> sucursales = new List<Sucursales>();
+    List<ColaboradorSeleccionado> colaboradoresSeleccionados = new List<ColaboradorSeleccionado>();
+    List<Transportistas> transportistas = new List<Transportistas>();
 
     private string UserIdentityName = "";
     protected override async Task OnInitializedAsync()
@@ -169,11 +195,11 @@
                 UserIdentityName = user.Identity.Name ?? "";
             }
         }
-        Detsucursales = await @Service.GetDetalleAsync(UserIdentityName);
+        listviajes = await @Service.GetViajeAsync(UserIdentityName);
 
         colaboradores = await @Service.GetColaboradoresAsync(UserIdentityName);
 
-        sucursales = await @Service.GetSucursalesAsync(UserIdentityName);
+        transportistas = await @Service.GetTransportistasAsync(UserIdentityName);
     }
 
     string GetColaboradorNombre(int? colaboradorId)
@@ -182,15 +208,15 @@
         return colaborador != null ? colaborador.Nombre : "No encontrado";
     }
 
-    string GetSucursalNombre(int? SucursalId)
+    string GetTransportistaNombre(int? TransportistaId)
     {
-        var sucursal = sucursales.FirstOrDefault(c => c.SucursalId == SucursalId);
-        return sucursal != null ? sucursal.Nombre : "No encontrado";
+        var transportista = transportistas.FirstOrDefault(c => c.TransportistaId == TransportistaId);
+        return transportista != null ? transportista.Nombre : "No encontrado";
     }
 
-    SucursalDetalles objDetalles = new SucursalDetalles();
+    Viajes objViajes = new Viajes();
     Colaboradores objColaborador = new Colaboradores();
-    Sucursales objSucursales = new Sucursales();
+    Transportistas objTransportista = new Transportistas();
 
     bool ShowPopup = false;
     void ClosePopup()
@@ -198,59 +224,59 @@
         // Close the Popup
         ShowPopup = false;
     }
-    void AddNewDet()
+    void AddNew()
     {
         // Make new forecast
-        objDetalles = new SucursalDetalles();
+        objViajes = new Viajes();
         // Set Id to 0 so we know it is a new record
-        objDetalles.SucursalDetalleId = 0;
+        objViajes.TransportistaId = 0;
         // Open the Popup
         ShowPopup = true;
     }
 
 
-    async Task SaveDet()
+    async Task Save()
     {
         // Close the Popup
         ShowPopup = false;
 
-        var existingDet = Detsucursales.FirstOrDefault(d => d.SucursalId == objSucursales.SucursalId);
+        var existingDet = listviajes.FirstOrDefault(d => d.Id == objViajes.Id);
 
         if (existingDet == null)
         {
-            if (objDetalles.SucursalDetalleId == 0)
+            if (objViajes.Id == 0)
             {
 
-                SucursalDetalles objNewDet = new SucursalDetalles();
-                objNewDet.ColaboradorId = objColaborador.ColaboradorId;
-                objNewDet.SucursalId = objSucursales.SucursalId;
-                objNewDet.DistanciaKilometros = objDetalles.DistanciaKilometros;
-                objNewDet.UserName = UserIdentityName;
+                Viajes objNewViaje = new Viajes();
+                objNewViaje.Fecha = objViajes.Fecha;
+                objNewViaje.Distancia = objViajes.Distancia;
+                objNewViaje.ColaboradorId = objViajes.ColaboradorId;
+                objNewViaje.TransportistaId = objViajes.TransportistaId;
+                objNewViaje.UserName = UserIdentityName;
                 var result =
-                @Service.CreateDetalleAsync(objNewDet);
+                @Service.CreateViajetAsync(objNewViaje);
             }
             else
             {
                 var result =
-              @Service.UpdateDetalleAsync(objDetalles);
+              @Service.UpdateViajeAsync(objViajes);
             }
-            Detsucursales =
-                await @Service.GetDetalleAsync(UserIdentityName);
+            listviajes =
+                await @Service.GetViajeAsync(UserIdentityName);
         }
         else
         {
             //toastService.ShowWarning("Advertencia El Colaborador Ya tiene asignada esta Sucursal");
-           Console.WriteLine("Advertencia El Colaborador Ya tiene asignada esta Sucursal");
         }
 
 
     }
 
 
-    void EditDetalle(SucursalDetalles detalles)
+    void Edit(Viajes viajes)
     {
 
-        objDetalles = detalles;
+        objViajes = viajes;
         // Open the Popup
         ShowPopup = true;
     }

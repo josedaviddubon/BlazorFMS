@@ -7,12 +7,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<BlazorFMS.Data.BlazorFMS.BlaFMSContext>(options =>
 options.UseSqlServer(
     builder.Configuration.GetConnectionString("DefaultConnection")));
 
+//builder.Services.AddBlazoredToast();
 //builder.Services.AddBlazoredToast();
 
 // Add services to the container.
@@ -24,6 +26,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+//builder.Services.AddSyncfusionBlazor();
+
 builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
 
 //builder.Services.AddSingleton<WeatherForecastService>();
@@ -32,6 +36,9 @@ builder.Services.AddScoped<ColaboradorServices>();
 builder.Services.AddScoped<SucursalService>();
 builder.Services.AddScoped<TransportistaServices>();
 builder.Services.AddScoped<AdministrarSucursalesServices>();
+builder.Services.AddScoped<ViajeService>();
+
+
 
 //builder.Services.AddScoped<IColaboradorServices, ColaboradorServices>();
 

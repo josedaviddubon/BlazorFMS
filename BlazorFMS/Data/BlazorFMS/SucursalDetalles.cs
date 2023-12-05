@@ -2,16 +2,23 @@
 #nullable disable
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace BlazorFMS.Data.BlazorFMS;
+
 
 public partial class SucursalDetalles
 {
     public int SucursalDetalleId { get; set; }
 
+    [Required(ErrorMessage = "Sucursal es Requerido")]
     public int? SucursalId { get; set; }
 
+    [Required(ErrorMessage = "Colaborador es Requerido")]
     public int? ColaboradorId { get; set; }
+
+    [Required(ErrorMessage = "Distancia Kilometros es Requerido")]
+    [Range(0, 50, ErrorMessage = "Ingrese una distancia mayor a 0 y menor o igual a 50")]
 
     public decimal? DistanciaKilometros { get; set; }
 

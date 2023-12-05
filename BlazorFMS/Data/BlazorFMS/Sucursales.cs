@@ -15,5 +15,5 @@ public partial class Sucursales
 
     public string UserName { get; set; }
 
-    public virtual ICollection<SucursalDetalles> SucursalDetalles { get; set; } = new List<SucursalDetalles>();
+    public virtual ICollection<SucursalDetalles> SucursalDetalle { get; set; } = new List<SucursalDetalles>();
 }

@@ -14,8 +14,9 @@ public partial class Colaboradores
     public string DireccionCasa { get; set; }
 
     public string UserName { get; set; }
+    //public bool Seleccionado { get; set; }
 
-    public virtual ICollection<SucursalDetalles> SucursalDetalles{ get; set; } = new List<SucursalDetalles>();
+    public virtual ICollection<SucursalDetalles> SucursalDetalle { get; set; } = new List<SucursalDetalles>();
 
-    public virtual ICollection<Viaje> Viaje { get; set; } = new List<Viaje>();
+    public virtual ICollection<Viajes> Viaje { get; set; } = new List<Viajes>();
 }
