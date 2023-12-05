@@ -209,7 +209,7 @@
     }
 
 
-    async Task SaveDet()
+    async Task SaveDets()
     {
         // Close the Popup
         ShowPopup = false;
@@ -219,16 +219,24 @@
         if (existingDet == null)
         {
             if (objDetalles.SucursalDetalleId == 0)
-            {
 
-                SucursalDetalles objNewDet = new SucursalDetalles();
-                objNewDet.ColaboradorId = objColaborador.ColaboradorId;
-                objNewDet.SucursalId = objSucursales.SucursalId;
-                objNewDet.DistanciaKilometros = objDetalles.DistanciaKilometros;
-                objNewDet.UserName = UserIdentityName;
-                var result =
-                @Service.CreateDetalleAsync(objNewDet);
-            }
+                if (objDetalles.DistanciaKilometros > 0 || objDetalles.DistanciaKilometros < 50)
+                {
+                    {
+
+                        SucursalDetalles objNewDet = new SucursalDetalles();
+                        objNewDet.ColaboradorId = objColaborador.ColaboradorId;
+                        objNewDet.SucursalId = objSucursales.SucursalId;
+                        objNewDet.DistanciaKilometros = objDetalles.DistanciaKilometros;
+                        objNewDet.UserName = UserIdentityName;
+                        var result =
+                        @Service.CreateDetalleAsync(objNewDet);
+                    }
+                }
+                else {
+                    Console.WriteLine("Advertencia La distancia tiene que ser mayor a 0 y menor a 50");
+                }
+
             else
             {
                 var result =
@@ -244,6 +252,45 @@
         }
 
 
+    }
+
+    async Task SaveDet()
+    {
+        // Close the Popup
+        ShowPopup = false;
+
+        var existingDet = Detsucursales.FirstOrDefault(d => d.SucursalId == objSucursales.SucursalId);
+
+        if (existingDet == null)
+        {
+            if (objDetalles.SucursalDetalleId == 0)
+            {
+                if (objDetalles.DistanciaKilometros > 0 && objDetalles.DistanciaKilometros < 50)
+                {
+                    SucursalDetalles objNewDet = new SucursalDetalles();
+                    objNewDet.ColaboradorId = objColaborador.ColaboradorId;
+                    objNewDet.SucursalId = objSucursales.SucursalId;
+                    objNewDet.DistanciaKilometros = objDetalles.DistanciaKilometros;
+                    objNewDet.UserName = UserIdentityName;
+                    var result = await @Service.CreateDetalleAsync(objNewDet);
+                }
+                else
+                {
+                    Console.WriteLine("Advertencia La distancia tiene que ser mayor a 0 y menor a 50");
+                }
+            }
+            else
+            {
+                var result = await @Service.UpdateDetalleAsync(objDetalles);
+            }
+
+            Detsucursales = await @Service.GetDetalleAsync(UserIdentityName);
+        }
+        else
+        {
+            //toastService.ShowWarning("Advertencia El Colaborador Ya tiene asignada esta Sucursal");
+            Console.WriteLine("Advertencia El Colaborador Ya tiene asignada esta Sucursal");
+        }
     }
 
 
