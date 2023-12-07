@@ -1,0 +1,236 @@
+﻿@page "/viajele"
+@using BlazorFMS.Data
+@using BlazorFMS.Data.BlazorFMS
+@using System.Globalization
+
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@inherits OwningComponentBase<ViajeService>
+
+<h1>Viajes</h1>
+
+<AuthorizeView>
+    <!-- Show this section if the user is logged in -->
+    <Authorized>
+        <h4>Hola, @context.User.Identity?.Name!</h4>
+        @if (listviajes == null)
+        {
+                <!-- Show this if the current user has no data... yet... -->
+                <p><em>Loading...</em></p>
+        }
+        else
+        {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Nombre Transportista</th>
+                            <th>Nombre Colaborador</th>
+                            <th>Distancia</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var viaje in listviajes)
+                    {
+                                <tr>
+                                    <td>@viaje.Fecha</td>
+                                    <td>@GetTransportistaNombre(viaje.TransportistaId)</td>
+                                    <td>@GetColaboradorNombre(viaje.ColaboradorId)</td>
+                                    <td>@viaje.Distancia</td>
+
+                                    <td>
+                                        <!-- Edit the current forecast -->
+                                        <button class="btn btn-primary"
+                                        @onclick="(() => Edit(viaje))">
+                                            Edit
+                                        </button>
+                                    </td>
+                                </tr>
+                    }
+                    </tbody>
+                </table>
+                <p>
+                    <button class="btn btn-primary" @onclick="AddNew">Agregar nuevo Viaje</button>
+                </p>
+            @if (ShowPopup)
+            {
+                        <div class="modal" tabindex="-1" style="display:block" role="dialog">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h3 class="modal-title">Viaje</h3>
+                                        <!-- Button to close the popup -->
+                                        <button type="button" class="close"
+                                        @onclick="ClosePopup">
+                                            <span aria-hidden="true">X</span>
+                                        </button>
+                                    </div>
+                                    <!-- Edit form for the current forecast -->
+                                    <EditForm Context="formContext"
+                                      Model="objViajes"
+                                      OnValidSubmit="Save">
+                                        <DataAnnotationsValidator />
+                                        <ul class="validation-errors">
+                                    @foreach (var message in formContext.GetValidationMessages())
+                                    {
+                                                    <li class="validation-message">@message</li>
+                                    }
+                                        </ul>
+                                        <div class="modal-body">
+                                    <p>
+                                        <label for="Fecha">Fecha: </label>
+                                        <!-- Utiliza un campo de fecha normal, permitiendo cambios -->
+                                        @*<InputDate id="Fecha" class="form-control" value="@_dateString" />*@
+                                        <input type="date" value="@_datestring" />
+                                    </p>
+
+                                            <p>
+                                                <label for="Distancia">Distancia: </label>
+                                                <InputNumber id="Distancia" class="form-control" placeholder="Distancia" @bind-Value="objViajes.Distancia" />
+                                            </p>
+
+                                            <p>
+                                                <label for="TransportistaId">Transportista: </label>
+                                                <InputSelect id="TransportistaId" class="form-control" @bind-Value="objViajes.TransportistaId">
+                                            @foreach (var transportista in transportistas)
+                                            {
+                                                            <option value="@transportista.TransportistaId">@transportista.Nombre</option>
+                                            }
+                                                </InputSelect>
+                                            </p>
+
+                                            <p>
+                                                <label for="ColaboradorId">Colaborador: </label>
+                                                <InputSelect id="ColaboradorId" class="form-control" @bind-Value="objViajes.ColaboradorId">
+                                            @foreach (var colaborador in colaboradores)
+                                            {
+                                                            <option value="@colaborador.ColaboradorId">@colaborador.Nombre</option>
+                                            }
+                                                </InputSelect>
+                                            </p>
+
+                                            <button class="btn btn-primary" type="submit">Guardar</button>
+
+                                    @if (objViajes.Id > 0)
+                                    {
+                                             @*       <button class="btn btn-primary" @onclick="Delete">Eliminar</button>*@
+                                    }
+                                        </div>
+                                    </EditForm>
+                                </div>
+                            </div>
+                        </div>
+            }
+        }
+    </Authorized>
+    <!-- Show this section if the user is not logged in -->
+    <NotAuthorized>
+        <p>Inicia Sesión Para Acceder.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private string _datestring;
+    [CascadingParameter]
+    private Task<AuthenticationState>? authenticationStateTask { get; set; }
+    List<Viajes> listviajes = new List<Viajes>();
+    List<Colaboradores> colaboradores = new List<Colaboradores>();
+    List<Transportistas> transportistas = new List<Transportistas>();
+
+    private string UserIdentityName = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Get the current user
+        if (authenticationStateTask != null)
+        {
+            var user = (await authenticationStateTask).User;
+            if (user.Identity != null)
+            {
+                UserIdentityName = user.Identity.Name ?? "";
+            }
+        }
+        listviajes = await Service.GetViajeAsync(UserIdentityName);
+        colaboradores = await Service.GetColaboradoresAsync(UserIdentityName);
+        transportistas = await Service.GetTransportistasAsync(UserIdentityName);
+
+        _datestring = DateTime.Now.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+    }
+
+    string GetColaboradorNombre(int? colaboradorId)
+    {
+        var colaborador = colaboradores.FirstOrDefault(c => c.ColaboradorId == colaboradorId);
+        return colaborador != null ? colaborador.Nombre : "No encontrado";
+    }
+
+    string GetTransportistaNombre(int? transportistaId)
+    {
+        var transportista = transportistas.FirstOrDefault(c => c.TransportistaId == transportistaId);
+        return transportista != null ? transportista.Nombre : "No encontrado";
+    }
+
+    Viajes objViajes = new Viajes();
+
+    bool ShowPopup = false;
+
+    void ClosePopup()
+    {
+        // Close the Popup
+        ShowPopup = false;
+    }
+
+    void AddNew()
+    {
+        // Make new forecast
+        objViajes = new Viajes();
+        // Set Id to 0 so we know it is a new record
+        objViajes.TransportistaId = 0;
+        // Open the Popup
+        ShowPopup = true;
+    }
+
+    async Task Save()
+    {
+        // Close the Popup
+        ShowPopup = false;
+
+        var existingDet = listviajes.FirstOrDefault(d => d.Id == objViajes.Id);
+
+        if (existingDet == null)
+        {
+            if (objViajes.Id == 0)
+            {
+                Viajes objNewViaje = new Viajes
+                    {
+                        Fecha = objViajes.Fecha,
+                        Distancia = objViajes.Distancia,
+                        ColaboradorId = objViajes.ColaboradorId,
+                        TransportistaId = objViajes.TransportistaId,
+                        UserName = UserIdentityName
+                    };
+
+                await Service.CreateViajetAsync(objNewViaje);
+            }
+            else
+            {
+                await Service.UpdateViajeAsync(objViajes);
+            }
+
+            listviajes = await Service.GetViajeAsync(UserIdentityName);
+        }
+        else
+        {
+            //toastService.ShowWarning("Advertencia El Colaborador Ya tiene asignada esta Sucursal");
+        }
+    }
+
+    void Edit(Viajes viajes)
+    {
+
+        objViajes = viajes;
+        // Open the Popup
+        ShowPopup = true;
+    }
+
+}
