@@ -1,0 +1,29 @@
+﻿@page "/resumen-costos"
+
+@*@inject ReportService reportService*@
+
+<h3>Resumen de Costos</h3>
+
+<p>Seleccione un rango de fechas:</p>
+<input type="date" @bind="fechaInicio" />
+<input type="date" @bind="fechaFin" />
+@*<button @onclick="CargarResumen">Cargar Resumen</button>*@
+
+@*@if (resumen != null)
+{
+    <div>
+        <p>Cantidad de Viajes: @resumen.CantidadViajes</p>
+        <p>Total a Pagar: @resumen.TotalPagar</p>
+    </div>
+}*@
+
+@code {
+    private ResumenCostos resumen;
+    private DateTime? fechaInicio;
+    private DateTime? fechaFin;
+
+    //private async Task CargarResumen()
+    //{
+    //    resumen = await reportService.ObtenerResumenCostos(fechaInicio, fechaFin);
+    //}
+}

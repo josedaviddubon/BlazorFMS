@@ -1,0 +1,49 @@
+﻿@page "/detalle-viajes"
+
+@*@inject ReportService reportService*@
+@inherits OwningComponentBase<ViajeService>
+
+<h3>Detalle de Viajes</h3>
+
+<p>Seleccione un rango de fechas:</p>
+<input type="date" @bind="fechaInicio" />
+<input type="date" @bind="fechaFin" />
+<button @onclick="CargarDetalle">Cargar Detalle</button>
+
+@if (viajes != null)
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Transportista</th>
+                <th>Distancia</th>
+                <th>Tarifa por Kilómetro</th>
+                <th>Costo Viaje</th>
+                <th>Fecha</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var viaje in viajes)
+            {
+                <tr>
+                    <td>@viaje.Transportista</td>
+                    <td>@viaje.Distancia</td>
+                    <td>@viaje.TarifaPorKilometro</td>
+                    <td>@viaje.CostoViaje</td>
+                    <td>@viaje.Fecha</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Viajes> viajes;
+    private DateTime? fechaInicio;
+    private DateTime? fechaFin;
+
+    private async Task CargarDetalle()
+    {
+        viajes = await reportService.ObtenerDetalleViajes(fechaInicio, fechaFin);
+    }
+}

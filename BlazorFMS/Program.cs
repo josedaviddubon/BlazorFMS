@@ -37,6 +37,8 @@ builder.Services.AddScoped<SucursalService>();
 builder.Services.AddScoped<TransportistaServices>();
 builder.Services.AddScoped<AdministrarSucursalesServices>();
 builder.Services.AddScoped<ViajeService>();
+//builder.Services.AddScoped<IReportService, ReportService>();
+
 
 
 
